@@ -1,2 +1,43 @@
 # procedures to process electron microscopy (EM) data
 
+1. be organized
+1)create one folder for one project, usually named by specimen and magnification, e.g., 'Mtb70S-29K/'
+2)under the project folder, use subfolders, e.g., 'Rawmovies/' for raw movie stacks
+3)under subfolders, use subsubfolder, usually named by date, e.g., '20150911/'
+4)under subsubfolder, use a UNIQUE name for each micrograph, usually named by date and a serial number, e.g., 20150911_001.dm4
+two summary e.g.:
+'Mtb70S-29K/Rawmovies/20150911/20150911_001.dm4'
+'Mtb70S-29K/Micrographs/20150911/20150911_001.mrc'
+
+2. preprocess movies
+***p3movie.py
+1)align frames (ITERATIVELY align each frame with the current best total sum)
+2)apply a dose-dependent filter (RNA/DNA tolerate ~2 times higher dose than proteins)
+3)output fulldose sum, lowdose sum, and lowdose averaged movies
+
+3. ctf
+***p3ctf.py
+1)based on fulldose sum
+2)contribution of amplitude contrast is 5%–10% for cryo-EM (use 10%)
+
+***p3defscreen.py
+screen based on the defocus value output by ctffind4
+
+4. locate particles
+***e2boxer
+1)low-pass filter to see the particles clearly
+2)erase: ①bad area; ②big no-particle area
+3)swarm tool:
+①box size: ideally D+2R, R=λΔF/d, see Rosenthal & Henderson, 2003. D is diameter of particles, λ=0.025Å for 200 keV, ΔF is defocus, d is target resolution
+②change threshold so that visible particles are not excluded
+③delete bad boxes (if the whole micrograph is bad, clear boxes)
+④finish one micrograph before processing the next
+4)exclude bad micrographs (boxes cleared to 0)
+
+5. screen micrographs
+***p3micscreen.py
+
+
+
+
+FOR REFERENCES, PLEASE RUN INDIVIDUAL PROGRAMS WITHOUT ANY OPTIONS.

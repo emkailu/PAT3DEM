@@ -1,0 +1,12 @@
+# utilities here are non-specific but useful programs, for pat3dem
+
+1. p3keepconnectedsshfs.sh
+keep sshfs connected
+
+2. p3findkey.py
+find the files/lines that contain key words
+
+3. p3finddiff.py
+find the lines that are different in two files
+
+

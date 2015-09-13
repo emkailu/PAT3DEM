@@ -11,11 +11,11 @@ def main():
 	optionally output the lines (of previously found files) containing a second key word (the first line for each file)
 	"""
 	
+	args_def = {'key':'Exited with exit code', 'key2':'0'}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("files", nargs='*', help="specify files")
-	parser.add_argument("-k", "--key", type=str, help="specify a key word, by default 'Exited with exit code'")
-	parser.add_argument("-k2", "--key2", type=str, help="specify a second key word, by default '0', which means does not output lines")
-	args_default = {'key':'Exited with exit code', 'key2':'0'}
+	parser.add_argument("-k", "--key", type=str, help="specify a key word, by default '{}'".format(args_def['key']))
+	parser.add_argument("-k2", "--key2", type=str, help="specify a second key word, by default '{}', which means does not output lines".format(args_def['key2']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
@@ -24,9 +24,9 @@ def main():
 		sys.exit(1)	
 	else:
 		# get default values
-		for i in args_default:
+		for i in args_def:
 			if args.__dict__[i] == None:
-				args.__dict__[i] = args_default[i]
+				args.__dict__[i] = args_def[i]
 		# loop over files
 		print "The following files contain '{}':".format(args.key)
 		out = []

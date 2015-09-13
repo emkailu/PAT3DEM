@@ -5,9 +5,10 @@
 2)under the project folder, use subfolders, e.g., 'Rawmovies/' for raw movie stacks
 3)under subfolders, use subsubfolder, usually named by date, e.g., '20150911/'
 4)under subsubfolder, use a UNIQUE name for each micrograph, usually named by date and a serial number, e.g., 20150911_001.dm4
-two summary e.g.:
+5)three e.g.:
 'Mtb70S-29K/Rawmovies/20150911/20150911_001.dm4'
 'Mtb70S-29K/Micrographs/20150911/20150911_001.mrc'
+'Mtb70S-29K/Micrographs/bad/20150912_005.mrc'
 
 2. preprocess movies
 ***p3movie.py

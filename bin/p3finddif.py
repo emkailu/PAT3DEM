@@ -11,9 +11,9 @@ def main():
 	output the lines that are different in file1 and file2
 	"""
 	
+	args_def = {}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("files", nargs='*', help="specify 2 files to be compared")
-	args_default = {}
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
@@ -22,9 +22,9 @@ def main():
 		sys.exit(1)	
 	else:
 		# get default values
-		for i in args_default:
+		for i in args_def:
 			if args.__dict__[i] == None:
-				args.__dict__[i] = args_default[i]
+				args.__dict__[i] = args_def[i]
 		#		
 		file1, file2 = args.files
 		with open(file1) as f1:

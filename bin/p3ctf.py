@@ -46,9 +46,8 @@ def main():
 				o_com_w.write('{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n'.format('#!/bin/bash', 'ctffind --omp-num-threads 1 --old-school-input << eof', i, i[:-4]+'.ctf', 2, args.voltage, 0.1, xmag, args.dpsize, 512, r1, r2, d1, d2, 500, 100, 'eof'))
 			# submit the job
 			cmd = "sh {}".format(o_com)
-			title = out
 			walltime, cpu, ptile = 1, 1, 1
-			p3c.ada(cmd, title, walltime, cpu, ptile)
+			p3c.ada(cmd, out, walltime, cpu, ptile)
 			
 if __name__ == '__main__':
 	main()

@@ -4,6 +4,7 @@ import os
 import sys
 import argparse
 import numpy
+import math
 
 def eval_unblur(root):
 	# return the unblur score
@@ -37,7 +38,7 @@ def main():
 	args_def = {'weight':'1 1'}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("mic", nargs='*', help="specify micrographs (in mrc format) to be screened")
-	parser.add_argument("-w", "--weight", type=str, help="specify weights, by default '{}', which means sig = sig(unblur/nump/defocus) * 1 + sig(1/thon/nump) * 1, use 0 to ignore one of them".format(args_def['weight']))
+	parser.add_argument("-w", "--weight", type=str, help="specify weights, by default '{}', which means sig = sig(unblur/sqrt(nump)/defocus) * 1 + sig(1/thon/sqrt(nump)) * 1, use 0 to ignore one of them".format(args_def['weight']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
@@ -55,7 +56,7 @@ def main():
 			root = mic[:-4]
 			unblur = eval_unblur(root)
 			defoc, thon = eval_ctffind(root)
-			nump = eval_coord(root)			
+			nump = math.sqrt(eval_coord(root))			
 			score_dict[mic] = [unblur / nump / defoc, 1 / thon / nump]
 		# calculate statistics in an array
 		arr = numpy.array(score_dict.values())

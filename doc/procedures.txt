@@ -15,14 +15,15 @@
 1)align frames (ITERATIVELY align each frame with the current best total sum)
 2)apply a dose-dependent filter (RNA/DNA tolerate ~2 times higher dose than proteins)
 3)output fulldose sum, lowdose sum, and lowdose averaged movies
+4)lowdose may also exclude the first few frames (~0.5s) due to beam induced drift, otherwise, during averaging adjacent frames, do not average them with later frames, then they can be weighted in relion movie processing
 
 3. ctf
 ***p3ctf.py
 1)based on fulldose sum
-2)contribution of amplitude contrast is 5%–10% for cryo-EM (use 10%)
+2)contribution of amplitude contrast is 5%–10% for cryo-EM, but practically use 10%, or even higher values to 20%
 
 ***p3defscreen.py
-screen based on the defocus value output by ctffind4
+screen based on the defocus value output by p3ctf.py
 
 4. locate particles
 ***e2boxer
@@ -35,10 +36,25 @@ screen based on the defocus value output by ctffind4
 ④finish one micrograph before processing the next
 4)exclude bad micrographs (boxes cleared to 0)
 
+***p3starcoord.py
+get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they are in the star files
+
+***p3starmerge.py
+merge star files containning particles, and regroup
+
 5. screen micrographs
 ***p3micscreen.py
+1)screen based on outputs of p3movie.py and p3ctf.py, modulated by number of particles and defocus
+2)the underlying assumptions are: 
+①the score of p3movie.py represents how well the frames can be aligned. If the alignment of frames is not good, neither is the alignment of particles, though relion movie processing may help if the bad alignment is caused by different per-particle drift
+②the score of p3ctf.py represents how far the Thon rings can go
+3)need to be modulated by sqrt(numptcl) and/or defocus
+4)sigma based cutoff
+5)sig = sig(unblur/sqrt(nump)/defocus) * weight1 + sig(1/thon/sqrt(nump)) * weight2
+6)double-check is necessary
+7)gradually exclude bad micrographs after classification/refinement
 
-
+6. 
 
 
 FOR REFERENCES, PLEASE RUN INDIVIDUAL PROGRAMS WITHOUT ANY OPTIONS.

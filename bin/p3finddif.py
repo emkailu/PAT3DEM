@@ -34,7 +34,10 @@ def main():
 				if lines1 != lines2:
 					print file1, '!=', file2
 					for i, line1 in enumerate(lines1):
-						line2 = lines2[i]
+						try:
+							line2 = lines2[i]
+						except IndexError:
+							sys.exit('file2 is shorter, further comparison makes no sense')
 						if line1 != line2:
 							print '*'*30
 							print 'In line {}:\n'.format(i), line1, line2

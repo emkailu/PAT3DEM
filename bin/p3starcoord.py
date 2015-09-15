@@ -57,8 +57,8 @@ def main():
 								x, y = float(line[star_dict['_rlnCoordinateX']]), float(line[star_dict['_rlnCoordinateY']])
 								# calculate new coord
 								if '_rlnOriginX' in star_dict and '_rlnOriginY' in star_dict:
-									x += float(line[star_dict['_rlnOriginX']])
-									y += float(line[star_dict['_rlnOriginY']])
+									x -= float(line[star_dict['_rlnOriginX']])
+									y -= float(line[star_dict['_rlnOriginY']])
 								# skip the edge
 								if args.edge != -1:
 									if not args.edge<=x<=args.x-args.edge or not args.edge<=y<=args.y-args.edge:

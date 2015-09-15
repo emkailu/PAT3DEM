@@ -54,7 +54,14 @@ merge star files containning particles, and regroup
 6)double-check is necessary
 7)gradually exclude bad micrographs after classification/refinement
 
-6. 
+6.
+
+
+
+?.interpret
+***p3cuboidvalue.py
+output the values of voxels within a cuboid defined by two coordinates
+
 
 
 FOR REFERENCES, PLEASE RUN INDIVIDUAL PROGRAMS WITHOUT ANY OPTIONS.

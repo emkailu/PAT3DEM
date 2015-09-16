@@ -59,9 +59,14 @@ merge star files containning particles, and regroup
 
 
 ?.interpret
-***p3cuboidvalue.py
-output the values of voxels within a cuboid defined by two coordinates
+***p3recrand.py
+reconstruct from randomly selected particles from _data.star
 
+***p3cuboidgen.py
+generate a cuboid on the grid of input image
+
+***p3cuboidvalue.py
+output the values of voxels within a coordinate range, 'x1 x2 y1 y2 z1 z2'
 
 
 FOR REFERENCES, PLEASE RUN INDIVIDUAL PROGRAMS WITHOUT ANY OPTIONS.

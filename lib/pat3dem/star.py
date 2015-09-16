@@ -1,5 +1,32 @@
 #!/usr/bin/env python
 
+# Assumption for the star format:
+# contain one or more 'data_*' blocks, for each block, 
+# either
+'''
+
+data_*
+
+loop_
+item1 #1
+...
+itemn #n
+item1_data ... itemn_data
+...
+item1_data ... itemn_data
+
+'''
+# or
+'''
+
+data_*
+
+item1 item1_data
+...
+itemn itemn_data
+
+'''
+
 def star_data(star):
 	# return 2 dict: {data1:line_num, data2:line_num}, {data1:lines, data2:lines}
 	data_dict = {}
@@ -44,7 +71,7 @@ def data_parse(d_lines):
 	return item_dict
 
 def star_parse(star, data):
-	# parse a star file containing a data_* label.
+	# parse a star file containing the data label.
 	# return a dict, whose keys are 'data_', ('loop_'), and items in 'data_'/'loop_'
 	d_lines = star_data(star)[1][data]
 	return data_parse(d_lines)

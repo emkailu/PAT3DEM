@@ -46,7 +46,7 @@ merge star files containning particles, and regroup
 ***p3micscreen.py
 1)screen based on outputs of p3movie.py and p3ctf.py, modulated by number of particles and defocus
 2)the underlying assumptions are: 
-①the score of p3movie.py represents how well the frames can be aligned. If the alignment of frames is not good, neither is the alignment of particles, though relion movie processing may help if the bad alignment is caused by different per-particle drift
+①the score of p3movie.py represents how well the frames can be aligned. If the alignment of frames is not good, neither will be the alignment of particles, though relion movie processing may help if the bad alignment is caused by different per-particle drift
 ②the score of p3ctf.py represents how far the Thon rings can go
 3)need to be modulated by sqrt(numptcl) and/or defocus
 4)sigma based cutoff

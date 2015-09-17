@@ -32,8 +32,10 @@ def set_value(d, coord_str, value):
 		sys.exit('Not 3D coordinates?!')
 	return d
 
-def get_value(d, coord_str):
-	# return a dictionary, {position1:value1, ..., position2:value2}, positions are from d, d = EMData(image), and defined by coord_str
+def get_value(image, coord_str):
+	# return a dictionary, {position1:value1, ..., position2:value2}, positions are from image, and defined by coord_str
+	print '\nIn {},'.format(image)
+	d = EMData(image)
 	p_dict = {}
 	coord_range = get_coord(coord_str)
 	c_len = len(coord_range)
@@ -42,7 +44,9 @@ def get_value(d, coord_str):
 		for x in range(x1, x2+1):
 			for y in range(y1, y2+1):
 				for z in range(z1, z2+1):
-					p_dict[(x, y, z)] = d.get_value_at(x, y, z)
+					value = d.get_value_at(x, y, z)
+					print '({}, {}, {}): {}'.format(x, y, z, value)
+					p_dict[(x, y, z)] = value
 	else:
 		sys.exit('Not 3D coordinates?')
 	return p_dict

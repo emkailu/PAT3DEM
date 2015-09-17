@@ -3,7 +3,6 @@
 import os
 import sys
 import argparse
-from EMAN2 import *
 import pat3dem.main as p3m
 
 def main():
@@ -36,20 +35,11 @@ def main():
 		# loop over input images
 		i_dict = {}
 		for i in args.image:
-			d = EMData(i)
 			# get values
-			i_dict[i] = p3m.get_value(d, args.coord)
+			i_dict[i] = p3m.get_value(i, args.coord)
 			# plot histogram
 			num = i_dict[i].values()
 			p3m.plot_hist(num, i[:-4]+'_{}-{}_{}-{}_{}-{}.png'.format(x1, x2, y1, y2, z1, z2))
-		# print position:value for each image	
-		for i in i_dict:
-			print '\nIn {},'.format(i)
-			p_dict = i_dict[i]
-			for x in range(x1, x2+1):
-				for y in range(y1, y2+1):
-					for z in range(z1, z2+1):
-						print '({}, {}, {}): {}'.format(x, y, z, p_dict[(x, y, z)])
-						
+			
 if __name__ == '__main__':
 	main()

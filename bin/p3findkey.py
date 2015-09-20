@@ -21,32 +21,31 @@ def main():
 	if len(sys.argv) == 1:
 		print "usage: " + usage
 		print "Please run '" + progname + " -h' for detailed options"
-		sys.exit(1)	
-	else:
-		# get default values
-		for i in args_def:
-			if args.__dict__[i] == None:
-				args.__dict__[i] = args_def[i]
-		# loop over files
-		print "The following files contain '{}':".format(args.key)
-		out = []
-		for i in args.files:
-			with open(i) as f:
-				if args.key in f.read():
-					print i
-					out += [i]
-		# find the lines
-		if args.key2 != '0':
-			print "\nThe following lines contain '{}':".format(args.key2)
-			o_lines = []
-			for j in out:
-				with open(j) as f2:
-					lines = f2.readlines()
-					for line in lines:
-						if args.key2 in line:
-							o_lines += [line]
-							break
-			print ''.join(o_lines)
-						
+		sys.exit(1)
+	# get default values
+	for i in args_def:
+		if args.__dict__[i] == None:
+			args.__dict__[i] = args_def[i]
+	# loop over files
+	print "The following files contain '{}':".format(args.key)
+	out = []
+	for i in args.files:
+		with open(i) as f:
+			if args.key in f.read():
+				print i
+				out += [i]
+	# find the lines
+	if args.key2 != '0':
+		print "\nThe following lines contain '{}':".format(args.key2)
+		o_lines = []
+		for j in out:
+			with open(j) as f2:
+				lines = f2.readlines()
+				for line in lines:
+					if args.key2 in line:
+						o_lines += [line]
+						break
+		print ''.join(o_lines)
+					
 if __name__ == '__main__':
 	main()

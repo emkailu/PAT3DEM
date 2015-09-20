@@ -22,26 +22,25 @@ def main():
 	if len(sys.argv) == 1:
 		print "usage: " + usage
 		print "Please run '" + progname + " -h' for detailed options"
-		sys.exit(1)	
-	else:
-		# get default values
-		for i in args_def:
-			if args.__dict__[i] == None:
-				args.__dict__[i] = args_def[i]
-		#	
-		image = args.image[0]
-		d = EMData(image)
-		i = args.increment
-		if i != -1:
-			edge = d.get_xsize() / i
-			for x in range(edge):
-				for y in range(edge):
-					for z in range(edge):
-						d.set_value_at(x*i,y*i,z*i,100 + x*x+y*y+z*z)
-		if args.coord != '-1 '*6:
-			p3m.set_value(d, args.coord, 100)
-		x1, x2, y1, y2, z1, z2 = p3m.get_coord(args.coord)
-		d.write_image(image[:-4]+"_cuboid_{}-{}_{}-{}_{}-{}.mrc".format(x1, x2, y1, y2, z1, z2))		
-		
+		sys.exit(1)
+	# get default values
+	for i in args_def:
+		if args.__dict__[i] == None:
+			args.__dict__[i] = args_def[i]
+	#	
+	image = args.image[0]
+	d = EMData(image)
+	i = args.increment
+	if i != -1:
+		edge = d.get_xsize() / i
+		for x in xrange(edge):
+			for y in xrange(edge):
+				for z in xrange(edge):
+					d.set_value_at(x*i,y*i,z*i,100 + x*x+y*y+z*z)
+	if args.coord != '-1 '*6:
+		p3m.set_value(d, args.coord, 100)
+	x1, x2, y1, y2, z1, z2 = p3m.get_coord(args.coord)
+	d.write_image(image[:-4]+"_cuboid_{}-{}_{}-{}_{}-{}.mrc".format(x1, x2, y1, y2, z1, z2))		
+	
 if __name__ == '__main__':
 	main()

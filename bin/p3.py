@@ -20,15 +20,14 @@ def main():
 	if len(sys.argv) == 1:
 		print "usage: " + usage
 		print "Please run '" + progname + " -h' for detailed options"
-		sys.exit(1)	
-	else:
-		# get default values
-		for i in args_def:
-			if args.__dict__[i] == None:
-				args.__dict__[i] = args_def[i]
-		#		
-		print args
-		
+		sys.exit(1)
+	# get default values
+	for i in args_def:
+		if args.__dict__[i] == None:
+			args.__dict__[i] = args_def[i]
+	#		
+	print args
+	
 				
 if __name__ == '__main__':
 	main()

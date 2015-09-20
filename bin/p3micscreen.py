@@ -44,43 +44,42 @@ def main():
 	if len(sys.argv) == 1:
 		print "usage: " + usage
 		print "Please run '" + progname + " -h' for detailed options"
-		sys.exit(1)	
-	else:
-		# get default values
-		for i in args_def:
-			if args.__dict__[i] == None:
-				args.__dict__[i] = args_def[i]
-		# loop over the input micrographs, get a dictionary {mic:[score1, score2]}
-		score_dict = {}
-		for mic in args.mic:
-			root = mic[:-4]
-			unblur = eval_unblur(root)
-			defoc, thon = eval_ctffind(root)
-			nump = math.sqrt(eval_coord(root))			
-			score_dict[mic] = [unblur / nump / defoc, 1 / thon / nump]
-		# calculate statistics in an array
-		arr = numpy.array(score_dict.values())
-		mean, sig = numpy.mean(arr, axis=0), numpy.std(arr, axis=0)
-		unblur_m, thon_m = mean
-		unblur_sig, thon_sig = sig
-		# get a sigma dictionary {mic:[sig_unblur, sig_thon]}
-		sig_dict = {}
-		for mic in args.mic:
-			unblur_sc, thon_sc = score_dict[mic]
-			sig_dict[mic] = [(unblur_sc-unblur_m)/unblur_sig, (thon_sc-thon_m)/thon_sig]		
-		# get a weighted sigma dictionary {mic:sig_unblur*w1,sig_thon*w2}
-		w1, w2 = args.weight.split()
-		w1, w2 = float(w1), float(w2)		
-		sigw_dict = {}
-		for mic in args.mic:
-			mic_u_sig, mic_t_sig = sig_dict[mic]
-			sigw_dict[mic] = mic_u_sig * w1 + mic_t_sig * w2
-		# get an inverse dictionary
-		inv = {}
-		for k, v in sigw_dict.iteritems():
-			inv[v] = inv.get(v, []) + [k]
-		for i in sorted(inv, reverse=True):
-			print i, ['{} [unblur_sig, Thon_sig]: {}'.format(mic, sig_dict[mic]) for mic in inv[i]]	
+		sys.exit(1)
+	# get default values
+	for i in args_def:
+		if args.__dict__[i] == None:
+			args.__dict__[i] = args_def[i]
+	# loop over the input micrographs, get a dictionary {mic:[score1, score2]}
+	score_dict = {}
+	for mic in args.mic:
+		root = mic[:-4]
+		unblur = eval_unblur(root)
+		defoc, thon = eval_ctffind(root)
+		nump = math.sqrt(eval_coord(root))			
+		score_dict[mic] = [unblur / nump / defoc, 1 / thon / nump]
+	# calculate statistics in an array
+	arr = numpy.array(score_dict.values())
+	mean, sig = numpy.mean(arr, axis=0), numpy.std(arr, axis=0)
+	unblur_m, thon_m = mean
+	unblur_sig, thon_sig = sig
+	# get a sigma dictionary {mic:[sig_unblur, sig_thon]}
+	sig_dict = {}
+	for mic in args.mic:
+		unblur_sc, thon_sc = score_dict[mic]
+		sig_dict[mic] = [(unblur_sc-unblur_m)/unblur_sig, (thon_sc-thon_m)/thon_sig]		
+	# get a weighted sigma dictionary {mic:sig_unblur*w1,sig_thon*w2}
+	w1, w2 = args.weight.split()
+	w1, w2 = float(w1), float(w2)		
+	sigw_dict = {}
+	for mic in args.mic:
+		mic_u_sig, mic_t_sig = sig_dict[mic]
+		sigw_dict[mic] = mic_u_sig * w1 + mic_t_sig * w2
+	# get an inverse dictionary
+	inv = {}
+	for k, v in sigw_dict.iteritems():
+		inv[v] = inv.get(v, []) + [k]
+	for i in sorted(inv, reverse=True):
+		print i, ['{} [unblur_sig, Thon_sig]: {}'.format(mic, sig_dict[mic]) for mic in inv[i]]	
 			
 if __name__ == '__main__':
 	main()

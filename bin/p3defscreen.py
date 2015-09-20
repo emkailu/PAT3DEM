@@ -20,27 +20,26 @@ def main():
 	if len(sys.argv) == 1:
 		print "usage: " + usage
 		print "Please run '" + progname + " -h' for detailed options"
-		sys.exit(1)	
+		sys.exit(1)
+	# get default values
+	for i in args_def:
+		if args.__dict__[i] == None:
+			args.__dict__[i] = args_def[i]
+	#
+	cutoff = args.cutoff * 10000
+	if args.large == 1:
+		for ctfout in args.ctfout:
+			with open(ctfout) as ctf_read:
+				defocus1 = float(ctf_read.readlines()[-1].split()[1])
+			if defocus1 > cutoff:
+				print ctfout
 	else:
-		# get default values
-		for i in args_def:
-			if args.__dict__[i] == None:
-				args.__dict__[i] = args_def[i]
-		#
-		cutoff = args.cutoff * 10000
-		if args.large == 1:
-			for ctfout in args.ctfout:
-				with open(ctfout) as ctf_read:
-					defocus1 = float(ctf_read.readlines()[-1].split()[1])
-				if defocus1 > cutoff:
-					print ctfout
-		else:
-			for ctfout in args.ctfout:
-				with open(ctfout) as ctf_read:
-					defocus2 = float(ctf_read.readlines()[-1].split()[2])
-				if defocus2 < cutoff:
-					print ctfout
+		for ctfout in args.ctfout:
+			with open(ctfout) as ctf_read:
+				defocus2 = float(ctf_read.readlines()[-1].split()[2])
+			if defocus2 < cutoff:
+				print ctfout
+		
 			
-				
 if __name__ == '__main__':
 	main()

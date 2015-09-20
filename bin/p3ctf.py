@@ -26,28 +26,27 @@ def main():
 	if len(sys.argv) == 1:
 		print "usage: " + usage
 		print "Please run '" + progname + " -h' for detailed options"
-		sys.exit(1)	
-	else:
-		# get default values
-		for i in args_def:
-			if args.__dict__[i] == None:
-				args.__dict__[i] = args_def[i]
-		# loop over all the input images
-		d1, d2 = args.defoci.split()
-		r1, r2 = args.res.split()
-		xmag = args.dpsize * 10000 / args.apix
-		for i in args.image:
-			# generate the com file
-			out = i[:-4]+'_ctffind3'
-			if os.path.isfile(i[:-4]+'.txt'):
-				continue
-			o_com = out + '.com'
-			with open(o_com, 'w') as o_com_w:
-				o_com_w.write('{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n'.format('#!/bin/bash', 'ctffind --omp-num-threads 1 --old-school-input << eof', i, i[:-4]+'.ctf', 2, args.voltage, 0.1, xmag, args.dpsize, 512, r1, r2, d1, d2, 500, 100, 'eof'))
-			# submit the job
-			cmd = "sh {}".format(o_com)
-			walltime, cpu, ptile = 1, 1, 1
-			p3c.ada(cmd, out, walltime, cpu, ptile)
+		sys.exit(1)
+	# get default values
+	for i in args_def:
+		if args.__dict__[i] == None:
+			args.__dict__[i] = args_def[i]
+	# loop over all the input images
+	d1, d2 = args.defoci.split()
+	r1, r2 = args.res.split()
+	xmag = args.dpsize * 10000 / args.apix
+	for i in args.image:
+		# generate the com file
+		out = i[:-4]+'_ctffind3'
+		if os.path.isfile(i[:-4]+'.txt'):
+			continue
+		o_com = out + '.com'
+		with open(o_com, 'w') as o_com_w:
+			o_com_w.write('{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n'.format('#!/bin/bash', 'ctffind --omp-num-threads 1 --old-school-input << eof', i, i[:-4]+'.ctf', 2, args.voltage, 0.1, xmag, args.dpsize, 512, r1, r2, d1, d2, 500, 100, 'eof'))
+		# submit the job
+		cmd = "sh {}".format(o_com)
+		walltime, cpu, ptile = 1, 1, 1
+		p3c.ada(cmd, out, walltime, cpu, ptile)
 			
 if __name__ == '__main__':
 	main()

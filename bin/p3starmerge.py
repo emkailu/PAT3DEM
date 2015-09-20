@@ -70,38 +70,39 @@ def main():
 	merge star files (including grouping), need:
 	"""
 	
+	args_def = {'group':50, 'root':'zz'}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("star", nargs='*', help="specify star files to be merged")
-	parser.add_argument("-g", "--group", type=int, help="specify the minimal number of particles for one group, by default 50")
-	parser.add_argument("-r", "--root", help="specify rootname for output, by default zz, outputing 'zz_merged.star' and 'zz_merged_grouped.star'")
+	parser.add_argument("-g", "--group", type=int, help="specify the minimal number of particles for one group, by default {}".format(args_def['group']))
+	parser.add_argument("-r", "--root", help="specify rootname for output, by default '{}'".format(args_def['root']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
 		print "Please run '" + progname + " -h' for detailed options"
-		sys.exit(1)	
-	else:
-		if not args.group:
-			args.group = 50
-		if not args.root:
-			args.root = 'zz'
-		write_merge = open(args.root + '_merged.star', 'w')
-		header = '\ndata_\n\nloop_ \n_rlnMicrographName #1 \n_rlnCoordinateX #2 \n_rlnCoordinateY #3 \n_rlnImageName #4 \n_rlnDefocusU #5 \n_rlnDefocusV #6 \n_rlnDefocusAngle #7 \n_rlnVoltage #8 \n_rlnSphericalAberration #9 \n_rlnAmplitudeContrast #10 \n_rlnMagnification #11 \n_rlnDetectorPixelSize #12 \n_rlnCtfFigureOfMerit #13 \n'
-		write_merge.write(header)
-		for star in args.star:
-			star_dict = p3s.parse_star(star, 'data_')
-			header_len = len(star_dict['data'])+len(star_dict['loop'])
-			with open(star) as read_star:
-				for line in read_star.readlines()[header_len:-1]:
-					l = line.split()
-					line_new = l[star_dict['_rlnMicrographName']], l[star_dict['_rlnCoordinateX']], l[star_dict['_rlnCoordinateY']], l[star_dict['_rlnImageName']], l[star_dict['_rlnDefocusU']], l[star_dict['_rlnDefocusV']], l[star_dict['_rlnDefocusAngle']], l[star_dict['_rlnVoltage']], l[star_dict['_rlnSphericalAberration']], l[star_dict['_rlnAmplitudeContrast']], l[star_dict['_rlnMagnification']], l[star_dict['_rlnDetectorPixelSize']], l[star_dict['_rlnCtfFigureOfMerit']] + ' \n'
-					write_merge.write(' '.join(line_new))
-		write_merge.write(' \n')	
-		write_merge.close()
-		with open(args.root + '_merged_grouped.star', 'w') as write_group:
-			write_group.write(header)
-			write_group.write(''.join(group_star(args.root + '_merged.star', args.group)))
-			write_group.write(' \n')
-		
+		sys.exit(1)
+	# get default values
+	for i in args_def:
+		if args.__dict__[i] == None:
+			args.__dict__[i] = args_def[i]
+	
+	write_merge = open(args.root + '_merged.star', 'w')
+	header = '\ndata_\n\nloop_ \n_rlnMicrographName #1 \n_rlnCoordinateX #2 \n_rlnCoordinateY #3 \n_rlnImageName #4 \n_rlnDefocusU #5 \n_rlnDefocusV #6 \n_rlnDefocusAngle #7 \n_rlnVoltage #8 \n_rlnSphericalAberration #9 \n_rlnAmplitudeContrast #10 \n_rlnMagnification #11 \n_rlnDetectorPixelSize #12 \n_rlnCtfFigureOfMerit #13 \n'
+	write_merge.write(header)
+	for star in args.star:
+		star_dict = p3s.parse_star(star, 'data_')
+		header_len = len(star_dict['data'])+len(star_dict['loop'])
+		with open(star) as read_star:
+			for line in read_star.readlines()[header_len:-1]:
+				l = line.split()
+				line_new = l[star_dict['_rlnMicrographName']], l[star_dict['_rlnCoordinateX']], l[star_dict['_rlnCoordinateY']], l[star_dict['_rlnImageName']], l[star_dict['_rlnDefocusU']], l[star_dict['_rlnDefocusV']], l[star_dict['_rlnDefocusAngle']], l[star_dict['_rlnVoltage']], l[star_dict['_rlnSphericalAberration']], l[star_dict['_rlnAmplitudeContrast']], l[star_dict['_rlnMagnification']], l[star_dict['_rlnDetectorPixelSize']], l[star_dict['_rlnCtfFigureOfMerit']] + ' \n'
+				write_merge.write(' '.join(line_new))
+	write_merge.write(' \n')	
+	write_merge.close()
+	with open(args.root + '_merged_grouped.star', 'w') as write_group:
+		write_group.write(header)
+		write_group.write(''.join(group_star(args.root + '_merged.star', args.group)))
+		write_group.write(' \n')
+	
 if __name__ == '__main__':
 	main()

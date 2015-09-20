@@ -77,8 +77,8 @@ def main():
 	parser.add_argument("-v", "--voltage", type=int, help="specify the voltage (kV), by default {}".format(args_def['voltage']))
 	parser.add_argument("-t", "--time", type=float, help="specify exposure time per frame in ms, by default {}".format(args_def['time']))
 	parser.add_argument("-r", "--rate", type=float, help="specify dose rate in e/pix/s (counting pixel, not superresolution), by default {}".format(args_def['rate']))
-	parser.add_argument("-s", "--save", type=str, help="save a specified number of aligned frames, by default {}, which means do not save. e.g., '0 19 4' means the saved movie starts from frame #0, ends at #19, in total (19-0+1)/4 = 5 frames".format(args_def['save']))
-	parser.add_argument("-s2", "--save2", type=str, help="save a second specified number of aligned frames, by default {}, which means do not save. e.g., '0 31 4' means the saved movie starts from frame #0, ends at #19, in total (31-0+1)/4 = 8 frames".format(args_def['save2']))
+	parser.add_argument("-s", "--save", type=str, help="save a specified number of aligned frames, by default {}, which means do not save. e.g., '0 19 4' means the saved movie starts from frame #0, ends at #19, in total (19-0+1)/4 = 5 frames. if 19 >= the real number of frames of the movie, skip".format(args_def['save']))
+	parser.add_argument("-s2", "--save2", type=str, help="save a second specified number of aligned frames, by default {}, which means do not save. e.g., '0 31 4' means the saved movie starts from frame #0, ends at #19, in total (31-0+1)/4 = 8 frames. if 31 >= the real number of frames of the movie, skip".format(args_def['save2']))
 	parser.add_argument("-x", "--xsuper", type=int, help="specify the x dimension of superresolution images, by default {}".format(args_def['xsuper']))
 	parser.add_argument("-d", "--delete", type=int, help="delete (!!!) the raw movie (specify as 1), by default {}, which means do not delete".format(args_def['delete']))
 	args = parser.parse_args()
@@ -132,14 +132,15 @@ def main():
 		# unblur step 2: apply dose filter, root = 'fulldose'
 		out_movie = run_unblur(run_unblur(in_movie, 'unfil', com_par), 'fulldose', com_par)
 		# get lowdose
-		if args.save != '0 0 0':
+		if args.save != '0 0 0' and com_par['last'] < com_par['nimg']:
 			in_movie = out_movie.replace('.mrc', '.mrcs')
 			os.symlink(out_movie, in_movie)			
 			get_ld(in_movie, 'lowdose', com_par)
 			if args.save2 != '0 0 0':
 				first, last, avg_bin = args.save2.split()
 				com_par['first'], com_par['last'], com_par['avg_bin'] = int(first), int(last), int(avg_bin)
-				get_ld(in_movie, 'lowdose2', com_par)
+				if com_par['last'] < com_par['nimg']:
+					get_ld(in_movie, 'lowdose2', com_par)
 		# delete intermediate files, they contain '.p3.'
 		for i in glob.glob(basename_raw + '*.p3.*'):
 			os.unlink(i)

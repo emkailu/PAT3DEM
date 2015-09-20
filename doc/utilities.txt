@@ -1,12 +1,17 @@
 # utilities here are non-specific but useful programs, for pat3dem
 
-1. p3keepconnectedsshfs.sh
+***p3keepconnected.sh
+keep connected with cluster by keeping typing 'bg' when the login window is left in background
+1. install xdotool; login in a new window; run this script in a new tab; go back to the login tab
+2. whenever you do not use the login tab, put the login window in background
+
+***p3keepconnectedsshfs.sh
 keep sshfs connected
 
-2. p3findkey.py
+***p3findkey.py
 find the files/lines that contain key words
 
-3. p3finddif.py
+***p3finddif.py
 find the lines that are different in two files
 
 

@@ -95,8 +95,7 @@ def main():
 	dose = str(args.time/1000.0 * args.rate / args.apix ** 2)
 	apix = str(args.apix)
 	voltage = str(args.voltage)
-	first, last, avg_bin = args.save.split()
-	com_par = {'dose':dose, 'apix':apix, 'voltage':voltage, 'save':args.save, 'first':int(first), 'last':int(last), 'avg_bin':int(avg_bin)}
+	com_par = {'dose':dose, 'apix':apix, 'voltage':voltage, 'save':args.save}
 	# loop over all the input movies
 	for movie in args.movie:
 		movie_raw = movie
@@ -132,6 +131,8 @@ def main():
 		# unblur step 2: apply dose filter, root = 'fulldose'
 		out_movie = run_unblur(run_unblur(in_movie, 'unfil', com_par), 'fulldose', com_par)
 		# get lowdose
+		first, last, avg_bin = args.save.split()
+		com_par['first'], com_par['last'], com_par['avg_bin'] = int(first), int(last), int(avg_bin)
 		if args.save != '0 0 0' and com_par['last'] < com_par['nimg']:
 			in_movie = out_movie.replace('.mrc', '.mrcs')
 			os.symlink(out_movie, in_movie)			

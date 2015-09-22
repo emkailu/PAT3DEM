@@ -11,6 +11,9 @@
 'Mtb70S-29K/Micrographs/bad/20150912_005.mrc'
 
 2. preprocess movies
+***mag_distortion_correct
+correct anisotropic magnification distortion, see Zhao et al., 2015 and Grant & Grigorieff, 2015
+
 ***p3movie.py
 1)align frames (ITERATIVELY align each frame with the current best total sum)
 2)apply a dose-dependent filter (RNA/DNA tolerate ~2 times higher dose than proteins)

@@ -21,7 +21,7 @@ correct anisotropic magnification distortion, see Zhao et al., 2015 and Grant & 
 4)lowdose may also exclude the first few frames (~0.5s) due to beam induced drift, otherwise, during averaging adjacent frames, do not average them with later frames, then they can be weighted in relion movie processing
 5)if the movies have different number of frames, e.g. 100 movies have 50 frames, another 100 movies have 25 frames, then the best way is to run a 50-frame movie processing for the 100  movies and another 25-frame movie processing for the 200 movies. Finally merge the shiny particles. The option '-s2' is designed for this purpose
 6)also be awared that it's better to do movie processing seperately for counting and superresolution data
-7)for faster processing on cluster, run ***p3download.py and then ***p3movierun.py
+7)for faster processing on cluster, run ***p3downloadrun.sh and then ***p3movierun.py
 
 3. ctf
 ***p3ctf.py

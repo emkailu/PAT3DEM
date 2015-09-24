@@ -1,7 +1,7 @@
 # utilities here are non-specific but useful programs, for pat3dem
 
 ***p3keepconnected.sh
-keep connected with cluster by keeping typing 'bg' when the login window is left in background
+keep connected with cluster by keeping typing 'bg\n' when the login window is left in background
 1. install xdotool; login in a new window; run this script in a new tab; go back to the login tab
 2. whenever you do not use the login tab, put the login window in background
 

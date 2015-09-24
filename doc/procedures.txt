@@ -24,6 +24,10 @@ correct anisotropic magnification distortion, see Zhao et al., 2015 and Grant & 
 7)for faster processing on cluster, run ***p3downloadrun.sh and then ***p3movierun.py
 
 3. ctf
+***gctf
+1)local refine to get the defocus for each particle
+2)high resolution refine
+
 ***p3ctf.py
 1)based on fulldose sum
 2)contribution of amplitude contrast is 5%–10% for cryo-EM, but practically use 10%, or even higher values to 20%

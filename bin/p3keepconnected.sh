@@ -9,7 +9,8 @@ while true
 do
 WID_new=`xdotool getwindowfocus|head -1`
 if [ "$WID_new" != "$WID_old" ];then
-xdotool key --delay 10 --clearmodifiers --window "$WID_old" b+g+"Return"
+xdotool type --delay 10 --clearmodifiers --window "$WID_old" "bg"
+xdotool key --delay 10 --clearmodifiers --window "$WID_old" "Return"
 fi
 sleep 5m
 done

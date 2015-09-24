@@ -9,9 +9,7 @@ while true
 do
 WID_new=`xdotool getwindowfocus|head -1`
 if [ "$WID_new" != "$WID_old" ];then
-xdotool key --delay 10 --clearmodifiers --window "$WID_old" p+3+d+o+w+n+l
-xdotool key --delay 10 --clearmodifiers --window "$WID_old" o+a+d+"period"+p+y+"space"
-xdotool key --delay 10 --clearmodifiers --window "$WID_old" f+"period"+t+x+t+"space"+"shift"+7
+xdotool type --delay 10 --clearmodifiers --window "$WID_old" "p3download.py f.txt &"
 xdotool key --delay 10 --clearmodifiers --window "$WID_old" "Return"
 fi
 sleep 30s

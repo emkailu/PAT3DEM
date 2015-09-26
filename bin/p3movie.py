@@ -103,7 +103,7 @@ def main():
 		basename_raw = basename
 		# unify mrc format to mrcs format
 		if movie[-4:] == '.mrc':
-			m_link = basename+'_mrc.p3.mrcs'
+			m_link = basename+'.p3.mrcs'
 			os.symlink(movie, m_link)
 			movie, basename = file_base(m_link)			
 		# get nimg
@@ -119,7 +119,7 @@ def main():
 			movie, basename = file_base(m_bin)
 		# unify counting dm4 format to mrcs format
 		if movie[-4:] == '.dm4':
-			m_mrcs = basename+'_dm4.p3.mrcs'
+			m_mrcs = basename+'.p3.mrcs'
 			for i in xrange(com_par['nimg']):
 				d=EMData(movie, i)
 				d.write_image(m_mrcs, i)

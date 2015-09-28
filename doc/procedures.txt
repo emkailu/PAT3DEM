@@ -67,6 +67,9 @@ merge star files containning particles, and regroup
 6.
 
 
+?.modeling
+***p3pdbdev.py
+output pdb1, whose bfactor is replaced by CA deviation between pdb1 and pdb2
 
 ?.interpret
 ***p3recrand.py

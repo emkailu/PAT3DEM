@@ -8,26 +8,26 @@ import pat3dem.star as p3s
 def getkey(item):
 	return float(item.split()[4])	
 
-def group_star(star, group):
+def star_group(star, group):
 	# calculate the number of particles in each micrograph
-	star_dict = p3s.parse_star(star, 'data_')
-	header_len = len(star_dict['data'])+len(star_dict['loop'])
+	star_dict = p3s.star_parse(star, 'data_')
+	header_len = len(star_dict['data_'])+len(star_dict['loop_'])
 	num_dict = {}
 	with open(star) as read_star:
 		lines = read_star.readlines()[header_len:-1]
 		for line in lines:
 			MicrographName = line.split()[0]
 			num_dict[MicrographName] = num_dict.get(MicrographName, 0) + 1
-	# sort by ctf
+	# sort by defocus
 	lines = sorted(lines, key=getkey)
 	# group, if less than args.group, and transfer to lines_new
 	lines_new = []
 	while len(lines) > 0:
-		num = num_dict[lines[0].split()[0]]
+		MicrographName = lines[0].split()[0]
+		num = num_dict[MicrographName]
 		if num >= group:
-			MicrographName_good = lines[0].split()[0]
 			for good, line_good in enumerate(lines):
-				if line_good.split()[0] != MicrographName_good:break
+				if line_good.split()[0] != MicrographName:break
 			lines_new += lines[:good]
 			lines = lines[good:]
 		else:
@@ -52,15 +52,16 @@ def group_star(star, group):
 				for line in lines[:i+j+1]:
 					l = line.split()
 					l[0] = MicrographName2
-					lines_new += ' '.join(l) + '\n'
+					lines_new += [' '.join(l) + '\n']
 				lines = lines[i+j+1:]
+				print 'Grouping {}!\n'.format(sets)				
 			if end == 1:
 				MicrographName3 = lines_new[-1].split()[0]
-				print MicrographName3
 				for line in lines:
 					l = line.split()
 					l[0] = MicrographName3
-					lines_new += ' '.join(l) + '\n'
+					lines_new += [' '.join(l) + '\n']
+				print 'Particles in {} cannot add up to more than {}, so they were grouped to the previous group: {}!\n'.format(sets, group, MicrographName3)
 				break
 	return lines_new
 
@@ -85,13 +86,14 @@ def main():
 	for i in args_def:
 		if args.__dict__[i] == None:
 			args.__dict__[i] = args_def[i]
-	
-	write_merge = open(args.root + '_merged.star', 'w')
+	# 
+	merged = args.root + '_merged.star'
+	write_merge = open(merged, 'w')
 	header = '\ndata_\n\nloop_ \n_rlnMicrographName #1 \n_rlnCoordinateX #2 \n_rlnCoordinateY #3 \n_rlnImageName #4 \n_rlnDefocusU #5 \n_rlnDefocusV #6 \n_rlnDefocusAngle #7 \n_rlnVoltage #8 \n_rlnSphericalAberration #9 \n_rlnAmplitudeContrast #10 \n_rlnMagnification #11 \n_rlnDetectorPixelSize #12 \n_rlnCtfFigureOfMerit #13 \n'
 	write_merge.write(header)
 	for star in args.star:
-		star_dict = p3s.parse_star(star, 'data_')
-		header_len = len(star_dict['data'])+len(star_dict['loop'])
+		star_dict = p3s.star_parse(star, 'data_')
+		header_len = len(star_dict['data_'])+len(star_dict['loop_'])
 		with open(star) as read_star:
 			for line in read_star.readlines()[header_len:-1]:
 				l = line.split()
@@ -99,10 +101,13 @@ def main():
 				write_merge.write(' '.join(line_new))
 	write_merge.write(' \n')	
 	write_merge.close()
-	with open(args.root + '_merged_grouped.star', 'w') as write_group:
+	print 'The merged star has been written in {}!\n'.format(merged)
+	grouped = args.root + '_merged_grouped.star'
+	with open(grouped, 'w') as write_group:
 		write_group.write(header)
-		write_group.write(''.join(group_star(args.root + '_merged.star', args.group)))
+		write_group.write(''.join(star_group(merged, args.group)))
 		write_group.write(' \n')
+	print 'The grouped star has been written in {}!\n'.format(grouped)
 	
 if __name__ == '__main__':
 	main()

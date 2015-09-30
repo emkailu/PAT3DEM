@@ -50,7 +50,8 @@ screen based on the defocus value output by p3ctf.py
 get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they are in the star files
 
 ***p3starmerge.py
-merge star files containning particles, and regroup
+1)merge star files containning particles, and regroup
+2)regroup, if only one star file was given
 
 5. screen micrographs
 ***p3micscreen.py

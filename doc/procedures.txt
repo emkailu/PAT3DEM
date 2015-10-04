@@ -73,6 +73,9 @@ get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they ar
 output pdb1, whose bfactor is replaced by CA deviation between pdb1 and pdb2
 
 ?.interpret
+***p3xml.py
+convert xml to txt and optionally display them
+
 ***p3recrand.py
 reconstruct from randomly selected particles from _data.star
 

@@ -36,6 +36,11 @@ def star_group(star, group):
 		MicrographName = lines[0].split()[0]
 		num = num_dict[MicrographName]
 		if num >= group:
+			# check if already reach the end
+			if num == len(lines):
+				# new group
+				lines_new, group_num = lines_group(lines_new, lines, group_num, 1)
+				break
 			for good, line_good in enumerate(lines):
 				if line_good.split()[0] != MicrographName:break
 			# new group
@@ -63,11 +68,11 @@ def star_group(star, group):
 				# new group
 				lines_new, group_num = lines_group(lines_new, lines[:i+j+1], group_num, 1)
 				lines = lines[i+j+1:]
-				print 'Grouping {}!\n'.format(sets)				
+				print 'Grouping {} into group_{:05}!\n'.format(sets, group_num)				
 			if end == 1:
 				# not new group
 				lines_new, group_num = lines_group(lines_new, lines, group_num, 0)
-				print 'Particles in {} cannot add up to more than {}, so they were grouped to the previous group: group_{}!\n'.format(sets, group, group_num)
+				print 'Particles in {} cannot add up to more than {}, so they were grouped to the previous group: group_{:05}!\n'.format(sets, group, group_num)
 				break
 	return lines_new
 

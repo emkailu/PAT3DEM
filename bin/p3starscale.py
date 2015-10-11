@@ -8,13 +8,14 @@ import pat3dem.star as p3s
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <a star file>
-	Write a new star file after scaling.
+	Write a new star file after scaling or resetting offsets only.
 	"""
 	
-	args_def = {'scale':0.5}	
+	args_def = {'scale':1, 'reset':0}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("star", nargs='*', help="specify a star file to be processed")
-	parser.add_argument("-s", "--scale", type=float, help="specify the down scaling factor, by default {}. e.g., 2 means downscaled by 2 times".format(args_def['scale']))
+	parser.add_argument("-s", "--scale", type=float, help="specify the down scaling factor, by default {}. e.g., 0.5 means downscaled by 0.5 times".format(args_def['scale']))
+	parser.add_argument("-r", "--reset", type=float, help="specify as 1 to reset the _rlnOriginX and _rlnOriginY only (will not change _rlnDetectorPixelSize), by default {}".format(args_def['reset']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
@@ -44,6 +45,9 @@ def main():
 		line[dps] = str(float(line[dps]) * args.scale)
 		line[ox] = str(float(line[ox]) / args.scale)
 		line[oy] = str(float(line[oy]) / args.scale)
+		if args.reset == 1:
+			line[ox] = '0'
+			line[oy] = '0'
 		write_scale.write(' '.join(line) + '\n')
 	write_scale.write(' \n')
 	write_scale.close()

@@ -6,7 +6,16 @@ import argparse
 import pat3dem.star as p3s
 
 def getkey(item):
-	return float(item.split()[4])	
+	return float(item.split()[4])
+
+def lines_group(lines_new, lines, group_num, new):
+	if new == 1:
+		group_num += 1
+	for line in lines:
+		line = line.split()
+		line += ['group_{:05}'.format(group_num), '{:05}'.format(group_num)]
+		lines_new += [' '.join(line) + '\n']
+	return lines_new, group_num
 
 def star_group(star, group):
 	# calculate the number of particles in each micrograph
@@ -18,17 +27,19 @@ def star_group(star, group):
 		for line in lines:
 			MicrographName = line.split()[0]
 			num_dict[MicrographName] = num_dict.get(MicrographName, 0) + 1
-	# sort by defocus
+	# sort by defocusU
 	lines = sorted(lines, key=getkey)
 	# group, if less than args.group, and transfer to lines_new
 	lines_new = []
+	group_num = 0
 	while len(lines) > 0:
 		MicrographName = lines[0].split()[0]
 		num = num_dict[MicrographName]
 		if num >= group:
 			for good, line_good in enumerate(lines):
 				if line_good.split()[0] != MicrographName:break
-			lines_new += lines[:good]
+			# new group
+			lines_new, group_num = lines_group(lines_new, lines[:good], group_num, 1)
 			lines = lines[good:]
 		else:
 			i = 0
@@ -49,19 +60,14 @@ def star_group(star, group):
 			if end == 0:
 				for j, line2 in enumerate(lines[i:]):
 					if line2.split()[0] != MicrographName2:break
-				for line in lines[:i+j+1]:
-					l = line.split()
-					l[0] = MicrographName2
-					lines_new += [' '.join(l) + '\n']
+				# new group
+				lines_new, group_num = lines_group(lines_new, lines[:i+j+1], group_num, 1)
 				lines = lines[i+j+1:]
 				print 'Grouping {}!\n'.format(sets)				
 			if end == 1:
-				MicrographName3 = lines_new[-1].split()[0]
-				for line in lines:
-					l = line.split()
-					l[0] = MicrographName3
-					lines_new += [' '.join(l) + '\n']
-				print 'Particles in {} cannot add up to more than {}, so they were grouped to the previous group: {}!\n'.format(sets, group, MicrographName3)
+				# not new group
+				lines_new, group_num = lines_group(lines_new, lines, group_num, 0)
+				print 'Particles in {} cannot add up to more than {}, so they were grouped to the previous group: group_{}!\n'.format(sets, group, group_num)
 				break
 	return lines_new
 
@@ -105,6 +111,7 @@ def main():
 	grouped = args.root + '_merged_grouped.star'
 	with open(grouped, 'w') as write_group:
 		write_group.write(header)
+		write_group.write('_rlnGroupName #14 \n_rlnGroupNumber #15 \n')
 		write_group.write(''.join(star_group(merged, args.group)))
 		write_group.write(' \n')
 	print 'The grouped star has been written in {}!\n'.format(grouped)

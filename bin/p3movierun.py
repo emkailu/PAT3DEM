@@ -8,8 +8,8 @@ import pat3dem.cluster as p3c
 
 def main():
 	progname = os.path.basename(sys.argv[0])
-	usage = progname + """ [options] <f.txt>
-	run p3movie.py after p3download.py
+	usage = progname + """ [options] <m.txt>
+	run p3movie.py to process movies listed in m.txt (except the last one), and the movies will be deleted to save space
 	"""
 	
 	args_def = {'apix':1.25, 'voltage':200, 'time':200, 'rate':4, 'save':'0 0 0', 'save2':'0 0 0', 'xsuper':7420}

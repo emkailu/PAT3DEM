@@ -67,6 +67,9 @@ get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they ar
 
 6.
 
+?. screen particles
+***p3starscreen.py
+Write two new star files after screening by an item in the star file
 
 ?.modeling
 ***p3pdbdev.py

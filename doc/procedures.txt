@@ -1,36 +1,26 @@
-# procedures to process electron microscopy (EM) data
+# Procedures to process electron microscopy (EM) data
 
-1. be organized
-1)create one folder for one project, usually named by specimen and magnification, e.g., 'Mtb70S-29K/'
-2)under the project folder, use subfolders, e.g., 'Rawmovies/' for raw movie stacks
-3)under subfolders, use subsubfolder, usually named by date, e.g., '20150911/'
-4)under subsubfolder, use a UNIQUE name for each micrograph, usually named by date and a serial number, e.g., 20150911_001.dm4
-5)three e.g.:
-'Mtb70S-29K/Rawmovies/20150911/20150911_001.dm4'
-'Mtb70S-29K/Micrographs/20150911/20150911_001.mrc'
-'Mtb70S-29K/Micrographs/bad/20150912_005.mrc'
+1. Be organized.
+specimen_mag/subfolder/date/date_number, e.g.,
+"PHN-GK_25K/Rawmovies/20151021/20151021_001.mrc"
 
-2. preprocess movies
+2. Preprocess movies.
 ***mag_distortion_correct
-correct anisotropic magnification distortion, see Zhao et al., 2015 and Grant & Grigorieff, 2015
+Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorieff, 2015.
 
 ***p3movie.py
-1)align frames (ITERATIVELY align each frame with the current best total sum)
-2)apply a dose-dependent filter (RNA/DNA tolerate ~2 times higher dose than proteins)
-3)output unfiltered fulldose sum (for ctf), filtered fulldose/lowdose sum, filtered lowdose averaged movies
-4)lowdose may also exclude the first few frames (~0.5s) due to beam induced drift, otherwise, during averaging adjacent frames, do not average them with later frames, then they can be weighted in relion movie processing
-5)if the movies have different number of frames, e.g. 100 movies have 50 frames, another 100 movies have 25 frames, then the best way is to run a 50-frame movie processing for the 100  movies and another 25-frame movie processing for the 200 movies. Finally merge the shiny particles. The option '-s2' is designed for this purpose
-6)also be aware that it's better to do movie processing seperately for counting and superresolution data
-7)for faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally
+1)Align frames: ITERATIVELY align each frame with the current best total sum.
+2)Output lowdose/lowdose2 sum/movie.
+①Do not use filter, as it may affect CTF and SNR.
+②Skip the first few frames due to beam induced drift, as it may affect CTF and SNR.
+③Lowdose2 e.g., if you have 100 25-frame movies and 100 50-frame movies, then do a 25-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them.
+4)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally.
 
-3. ctf
-***gctf
-1)locally refine to get the defocus for each particle
-2)high resolution refine
-
+'''
+3. CTF.
 ***p3ctf.py
-1)based on fulldose sum
-2)contribution of amplitude contrast is 5%–10% for cryo-EM, but practically use 10%, or even higher values to 20%
+1)Based on unfiltered lowdose/lowdose2 movie.
+2)Choose a right resolution range.
 
 ***p3defscreen.py
 screen based on the defocus value output by p3ctf.py

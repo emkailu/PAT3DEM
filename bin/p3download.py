@@ -8,8 +8,8 @@ import pat3dem.cluster as p3c
 
 def main():
 	progname = os.path.basename(sys.argv[0])
-	usage = progname + """ [options] <f.txt>
-	download the file listed in the first line of f.txt, whenever the local disk is not full. then overwrite f.txt with the following lines
+	usage = progname + """ [options] <d.txt>
+	download the file listed in the first line of d.txt, whenever the local disk is not full. then overwrite d.txt with the following lines
 	"""
 	
 	args_def = {'password':'/home/kailuyang/.pp'}	
@@ -44,7 +44,7 @@ def main():
 	# download from chiu to ada, only if file does not exist
 	if not os.path.isfile(j):
 		p3c.chiu_download(i, j, com_par)
-		# overwrite f.txt
+		# overwrite d.txt
 		if len(lines) > 1:
 			with open(args.f[0], 'w') as f:
 				f.write(''.join(lines[1:]))	

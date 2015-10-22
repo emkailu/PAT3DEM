@@ -25,15 +25,11 @@ def run_unblur(in_movie, root, com_par):
 	log = out + '_unblur.log'
 	expert = 'no'
 	if root == 'unfil':
+		dose_filter = 'no'
+	if com_par['save'] != '0 0 0':
 		save_movie = 'yes\n'+out_movie
-		dose_filter = 'no'		
-	elif root == 'fulldose':
-		pre_exp = '0'			
-		dose_filter = '\n'.join(['yes', com_par['dose'], com_par['voltage'], pre_exp])
-		if com_par['save'] != '0 0 0':
-			save_movie = 'yes\n'+out_movie
-		else:
-			save_movie = 'no'
+	else:
+		save_movie = 'no'			
 	with open(com, 'w') as write_com:
 		write_com.write('\n'.join([unblur, in_movie, str(com_par['nimg']), out_sum, out_shift, com_par['apix'], dose_filter, save_movie, expert, 'eof']))
 	with open(log, 'w') as write_log:
@@ -41,8 +37,8 @@ def run_unblur(in_movie, root, com_par):
 	return out_movie
 
 def get_ld(in_movie, root, com_par):
-	# get lowdose from _fulldose_movie.mrcs
-	basename = in_movie.replace('_fulldose_movie.p3.mrcs', '')
+	# get lowdose from _unfil_movie.mrcs
+	basename = in_movie.replace('_unfil_movie.p3.mrcs', '')
 	out = basename + '_' + root
 	ld_movie = out + '_movie.mrcs'
 	ld_sum = out + '.mrc'
@@ -64,21 +60,18 @@ def get_ld(in_movie, root, com_par):
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <movies>
-	output unfiltered fulldose sum (for ctf), filtered fulldose/lowdose sum, filtered lowdose averaged movies
+	Output lowdose/lowdose2 sum/movie.
 	needs:
 	unblur (v1.0.2, Grant & Grigorieff, 2015)
-	EMAN2 (v2.11, Tang et al., 2007)
+	EMAN2 (v2.12, Tang et al., 2007)
 	"""
 	
-	args_def = {'apix':1.25, 'voltage':200, 'time':200, 'rate':4, 'save':'0 0 0', 'save2':'0 0 0', 'xsuper':7420, 'delete':0}	
+	args_def = {'apix':1.25, 'save':'0 0 0', 'save2':'0 0 0', 'xsuper':7420, 'delete':0}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("movie", nargs='*', help="specify movies to be processed")
 	parser.add_argument("-a", "--apix", type=float, help="specify apix, by default {}".format(args_def['apix']))
-	parser.add_argument("-v", "--voltage", type=int, help="specify the voltage (kV), by default {}".format(args_def['voltage']))
-	parser.add_argument("-t", "--time", type=float, help="specify exposure time per frame in ms, by default {}".format(args_def['time']))
-	parser.add_argument("-r", "--rate", type=float, help="specify dose rate in e/pix/s (counting pixel, not superresolution), by default {}".format(args_def['rate']))
-	parser.add_argument("-s", "--save", type=str, help="save a specified number of aligned frames, by default {}, which means do not save. e.g., '0 19 4' means the saved movie starts from frame #0, ends at #19, in total (19-0+1)/4 = 5 frames. if 19 >= the real number of frames of the movie, skip".format(args_def['save']))
-	parser.add_argument("-s2", "--save2", type=str, help="save a second specified number of aligned frames, by default {}, which means do not save. e.g., '0 31 4' means the saved movie starts from frame #0, ends at #19, in total (31-0+1)/4 = 8 frames. if 31 >= the real number of frames of the movie, skip".format(args_def['save2']))
+	parser.add_argument("-s", "--save", type=str, help="save a specified number of aligned frames, by default {}, which means do not save. e.g., '2 19 2' means the saved movie starts from frame #2, ends at #19, in total (19-2+1)/2 = 9 frames. if 19 >= the real number of frames of the movie, skip".format(args_def['save']))
+	parser.add_argument("-s2", "--save2", type=str, help="save a second specified number of aligned frames, by default {}, which means do not save. e.g., '2 31 2' means the saved movie starts from frame #2, ends at #31, in total (31-2+1)/2 = 15 frames. if 31 >= the real number of frames of the movie, skip".format(args_def['save2']))
 	parser.add_argument("-x", "--xsuper", type=int, help="specify the x dimension of superresolution images, by default {}".format(args_def['xsuper']))
 	parser.add_argument("-d", "--delete", type=int, help="delete (!!!) the raw movie (specify as 1), by default {}, which means do not delete".format(args_def['delete']))
 	args = parser.parse_args()
@@ -92,10 +85,8 @@ def main():
 		if args.__dict__[i] == None:
 			args.__dict__[i] = args_def[i]
 	# get common parameters
-	dose = str(args.time/1000.0 * args.rate / args.apix ** 2)
 	apix = str(args.apix)
-	voltage = str(args.voltage)
-	com_par = {'dose':dose, 'apix':apix, 'voltage':voltage, 'save':args.save}
+	com_par = {'apix':apix, 'save':args.save}
 	# loop over all the input movies
 	for movie in args.movie:
 		movie_raw = movie
@@ -127,9 +118,8 @@ def main():
 		# link mrcs as mrc format
 		in_movie = basename + '.p3.mrc'
 		os.symlink(movie, in_movie)
-		# unblur step 1: align frames, root = 'unfil'
-		# unblur step 2: apply dose filter, root = 'fulldose'
-		out_movie = run_unblur(run_unblur(in_movie, 'unfil', com_par), 'fulldose', com_par)
+		# unblur: align frames, root = 'unfil'
+		out_movie = run_unblur(in_movie, 'unfil', com_par)
 		# get lowdose
 		first, last, avg_bin = args.save.split()
 		com_par['first'], com_par['last'], com_par['avg_bin'] = int(first), int(last), int(avg_bin)

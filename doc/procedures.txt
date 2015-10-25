@@ -25,8 +25,8 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 ③Choose a right defoci range.
 3)For faster processing, run ***p3ctfrun.py.
 
-***p3defscreen.py
-screen based on the defocus value output by p3ctf.py
+***p3ctfscreen.py
+screen based on the output of p3ctf.py
 
 4. locate particles
 ***e2boxer

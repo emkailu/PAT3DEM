@@ -67,11 +67,11 @@ def ctf_run(image, com_par):
 		else:
 			p2_minres = 20.0
 		# if parameters went wrong
-		if p2_minres - p2_maxres < 3:
+		if p2_minres - p2_maxres < 5:
 			print 'Please check {}!'.format(ctftxt)
 			sys.exit()
 		# elif parameters converged
-		elif p2_minres == p1_minres and p2_maxres == p1_maxres and p2_mindef > p1_mindef and p2_maxdef < p1_maxdef:
+		elif p2_minres == p1_minres and p2_maxres == p1_maxres and p2_mindef > p1_mindef and p2_maxdef < p1_maxdef or com_par['iter'] == 10:
 			# test avg frames
 			com_par['minres'], com_par['maxres'], com_par['mindef'], com_par['maxdef'], com_par['step'] = p2_minres, p2_maxres, p2_mindef-1000, p2_maxdef+2000, 100
 			for i in xrange(1, com_par['nimg']):
@@ -118,12 +118,13 @@ def ctf_run(image, com_par):
 				os.unlink(i)
 			for i in glob.glob(basename + '*.p3_*'):
 				os.unlink(i)						
-			return 'OK'				
+			return 'OK'			
 		# else parameters haven't converged
 		else:
 			com_par['movie'] = 'yes\n{}'.format(com_par['nimg'])
 			com_par['minres'], com_par['maxres'], com_par['mindef'], com_par['maxdef'], com_par['step'] = p2_minres, p2_maxres, p2_mindef-1000, p2_maxdef+2000, 100
 			ctf(image, com_par)
+			com_par['iter'] += 1	
 			
 def main():
 	progname = os.path.basename(sys.argv[0])
@@ -155,6 +156,7 @@ def main():
 	com_par = {'apix':args.apix, 'voltage':args.voltage, 'cs':args.cs, 'ac':args.ac, 'dpsize':args.dpsize}
 	# loop over all the input images
 	for image in args.image:
+		com_par['iter'] = 0
 		status = ctf_run(image, com_par)
 		while status != 'OK':
 			status = ctf_run(image, com_par)

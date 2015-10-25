@@ -16,11 +16,14 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 ③Lowdose2 e.g., if you have 100 25-frame movies and 100 50-frame movies, then do a 25-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them.
 4)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally.
 
-'''
 3. CTF.
 ***p3ctf.py
 1)Based on unfiltered lowdose/lowdose2 movie.
-2)Choose a right resolution range.
+2)Choose good parameters.
+①Increase the minimum resolution to "just before" the first zero of the CTF.
+②Increase the maximum resolution to approximately where ctffind reports detecting rings.
+③Choose a right defoci range.
+3)For faster processing, run ***p3ctfrun.py.
 
 ***p3defscreen.py
 screen based on the defocus value output by p3ctf.py

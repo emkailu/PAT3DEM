@@ -14,7 +14,7 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 ①Do not use filter, as it may affect CTF and SNR.
 ②Skip the first few frames due to beam induced drift, as it may affect CTF and SNR.
 ③Lowdose2 e.g., if you have 100 25-frame movies and 100 50-frame movies, then do a 25-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them.
-4)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally.
+3)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally.
 
 3. CTF.
 ***p3ctf.py
@@ -26,39 +26,26 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 3)For faster processing, run ***p3ctfrun.py.
 
 ***p3ctfscreen.py
-screen based on the output of p3ctf.py
+Screen based on the output of p3ctf.py.
 
-4. locate particles
+4. Locate particles.
 ***e2boxer
-1)low-pass filter to see the particles clearly
-2)erase: ①bad area; ②big no-particle area
-3)swarm tool:
-①box size: ideally D+2R, R=λΔF/d, see Rosenthal & Henderson, 2003. D is diameter of particles, λ=0.025Å for 200 keV, ΔF is defocus, d is target resolution
-②change threshold so that visible particles are not excluded
-③delete bad boxes (if the whole micrograph is bad, clear boxes)
-④finish one micrograph before processing the next
-4)exclude bad micrographs (boxes cleared to 0)
+1)Low-pass filter to see particles clearly.
+2)Erase: ①bad area; ②big no-particle area.
+3)Swarm tool:
+①Box size: ideally D+2R, R=λΔF/d, see Rosenthal & Henderson, 2003. D is diameter of particles, λ=0.025Å for 200 keV, ΔF is defocus, d is target resolution.
+②Change threshold so that visible particles are not excluded.
+③Delete bad boxes (if the whole micrograph is bad, clear boxes).
+④Finish one micrograph before processing the next.
+4)Exclude bad micrographs (boxes cleared to 0).
 
 ***p3starcoord.py
-get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they are in the star files
+Get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they are in the star files.
 
 ***p3starmerge.py
-1)merge star files containning particles, and regroup
-2)regroup, if only one star file was given
+1)Merge star files containning particles, and regroup.
+2)Regroup, if only one star file was given.
 
-5. screen micrographs
-***p3micscreen.py
-1)screen based on outputs of p3movie.py and p3ctf.py, modulated by number of particles and defocus
-2)the underlying assumptions are: 
-①the score of p3movie.py represents how well the frames can be aligned. If the alignment of frames is not good, neither will be the alignment of particles, though relion movie processing may help if the bad alignment is caused by different per-particle drift
-②the score of p3ctf.py represents how far the Thon rings can go
-3)need to be modulated by sqrt(numptcl) and/or defocus
-4)sigma based cutoff
-5)sig = sig(unblur/sqrt(nump)/defocus) * weight1 + sig(1/thon/sqrt(nump)) * weight2
-6)double-check is necessary
-7)gradually exclude bad micrographs after classification/refinement
-
-6.
 
 ?. screen particles
 ***p3starscreen.py

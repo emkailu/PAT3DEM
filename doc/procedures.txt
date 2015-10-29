@@ -1,10 +1,10 @@
 # Procedures to process electron microscopy (EM) data
 
-1. Be organized.
+1. BE ORGANIZED.
 specimen_mag/subfolder/date/date_number, e.g.,
 "PHN-GK_25K/Rawmovies/20151021/20151021_001.mrc"
 
-2. Preprocess movies.
+2. PREPROCESS MOVIES.
 ***mag_distortion_correct
 Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorieff, 2015.
 
@@ -28,7 +28,7 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 ***p3ctfscreen.py
 Screen based on the output of p3ctf.py.
 
-4. Locate particles.
+4. LOCATE PARTICLES.
 ***e2boxer
 1)Low-pass filter to see particles clearly.
 2)Erase: ①bad area; ②big no-particle area.
@@ -46,27 +46,37 @@ Get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they ar
 1)Merge star files containning particles, and regroup.
 2)Regroup, if only one star file was given.
 
+5. SCREEN PARTICLES.
+***relion_refine
+1)2D: ①Not super-accurate; ②Ignore CTFs until first peak.
+2)3D: Try different parameters to make it work.
 
-?. screen particles
 ***p3starscreen.py
-Write two new star files after screening by an item in the star file
+Write two new star files after screening by an item in the star file.
 
-?.modeling
-***p3pdbdev.py
-output pdb1, whose bfactor is replaced by CA deviation between pdb1 and pdb2
+6. GOLD-STANDARD REFINEMENT.
+***SIMPLE
+Generate an initial model.
 
-?.interpret
+***relion_refine
+1)It's not always necessary to low-pass filter the initial model.
+2)Largest memory is used when each iteration is initialized.
+3)Movie processing.
+
+7. INTERPRET MAPS.
 ***p3xml.py
-convert xml to txt and optionally display them
+Convert xml to txt and optionally display it.
 
 ***p3recrand.py
-reconstruct from randomly selected particles from _data.star
+Reconstruct from randomly selected particles from _data.star.
 
 ***p3cuboidgen.py
-generate a cuboid on the grid of input image
+Generate a cuboid on the grid of input image.
 
 ***p3cuboidvalue.py
-output the values of voxels within a coordinate range, 'x1 x2 y1 y2 z1 z2'
+Output the values of voxels within a coordinate range, 'x1 x2 y1 y2 z1 z2'.
 
+***p3pdbdev.py
+Output pdb1, whose B-factor is replaced by CA deviation between pdb1 and pdb2.
 
-FOR REFERENCES, PLEASE RUN INDIVIDUAL PROGRAMS WITHOUT ANY OPTIONS.
+RUN INDIVIDUAL PROGRAMS WITHOUT ANY OPTIONS TO GET REFERENCES OF DEPENDENCIES.

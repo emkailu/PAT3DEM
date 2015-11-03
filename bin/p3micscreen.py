@@ -32,7 +32,7 @@ def eval_coord(root):
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <micrographs>
-	screen micrographs based on outputs of p3movie.py and p3ctf.py, modulated by numptcl and defocus
+	Screen micrographs based on outputs of p3movie.py and p3ctf.py, modulated by numptcl and defocus.
 	"""
 	
 	args_def = {'weight':'1 1'}	

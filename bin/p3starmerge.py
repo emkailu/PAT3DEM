@@ -37,7 +37,8 @@ def star_group(star, group):
 		num = num_dict[MicrographName]
 		if num >= group:
 			# check if already reach the end
-			if num == len(lines):
+			len_lines = len(lines)
+			if num == len_lines:
 				# new group
 				lines_new, group_num = lines_group(lines_new, lines, group_num, 1)
 				break
@@ -66,8 +67,8 @@ def star_group(star, group):
 				for j, line2 in enumerate(lines[i:]):
 					if line2.split()[0] != MicrographName2:break
 				# new group
-				lines_new, group_num = lines_group(lines_new, lines[:i+j+1], group_num, 1)
-				lines = lines[i+j+1:]
+				lines_new, group_num = lines_group(lines_new, lines[:i+j], group_num, 1)
+				lines = lines[i+j:]
 				print 'Grouping {} into group_{:05}!\n'.format(sets, group_num)				
 			if end == 1:
 				# not new group

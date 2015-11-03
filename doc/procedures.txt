@@ -39,6 +39,9 @@ Screen based on the output of p3ctf.py.
 ④Finish one micrograph before processing the next.
 4)Exclude bad micrographs (boxes cleared to 0).
 
+***relion_preprocess
+1)Stddev for white/black dust removal. Always use -1. If it doesn't work, find and exclude the bad particles.
+
 ***p3starcoord.py
 Get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they are in the star files.
 
@@ -47,8 +50,15 @@ Get coordinates from star files, consider _rlnOriginX and _rlnOriginY if they ar
 2)Regroup, if only one star file was given.
 
 5. SCREEN PARTICLES.
+***p3micscreen.py
+Screen micrographs based on outputs of p3movie.py and p3ctf.py, modulated by numptcl and defocus.
+
 ***relion_refine
-1)2D: ①Not super-accurate; ②Ignore CTFs until first peak.
+1)2D:
+①Not super-accurate.
+②Ignore CTFs until first peak.
+③Clean background beyond particles is good.
+④Density variation within particles is good.
 2)3D: Try different parameters to make it work.
 
 ***p3starscreen.py
@@ -61,7 +71,8 @@ Generate an initial model.
 ***relion_refine
 1)It's not always necessary to low-pass filter the initial model.
 2)Largest memory is used when each iteration is initialized.
-3)Movie processing.
+3)Movie processing: ①Masking is not necessary; ②Use running average to get enough SNR.
+4)Masking after several iterations may not be as optimal as from the first iteration.
 
 7. INTERPRET MAPS.
 ***p3xml.py

@@ -7,7 +7,7 @@ import argparse
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <input>
-	process input
+	Process input
 	"""
 	
 	args_def = {'apix':1.25, 'num':3}	

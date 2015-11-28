@@ -7,8 +7,8 @@ import argparse
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <files>
-	find the files that contain a key word (usually for jobstatus, 'Exited with exit code')
-	optionally output the lines (of previously found files) containing a second key word (the first line for each file)
+	Find the files that contain a key word (usually for jobstatus, 'Exited with exit code').
+	Optionally output the lines (of previously found files) containing a second key word (the first line for each file).
 	"""
 	
 	args_def = {'key':'Exited with exit code', 'key2':'0'}	
@@ -20,7 +20,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

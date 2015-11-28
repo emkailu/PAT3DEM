@@ -10,8 +10,8 @@ import random
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <_data.star>
-	reconstruct from randomly selected particles from _data.star
-	needs:
+	Reconstruct from randomly selected particles from _data.star.
+	Needs:
 	relion (v1.4, Scheres, 2012)
 	"""
 	
@@ -26,7 +26,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

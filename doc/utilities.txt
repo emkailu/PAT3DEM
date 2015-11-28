@@ -1,4 +1,4 @@
-# Utilities here are non-specific but useful programs, for pat3dem
+# Utilities here are non-specific but useful programs, for pat3dem.
 
 ***p3keepconnected.sh
 Keep connected with cluster by keeping typing 'bg\n' when the login window is left in background.

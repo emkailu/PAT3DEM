@@ -11,7 +11,7 @@ from emapplication import EMApp
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <xml>
-	Convert xml to txt and optionally display them
+	Convert xml to txt and optionally display them.
 	"""
 	
 	args_def = {'display':1}	
@@ -22,7 +22,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

@@ -80,7 +80,7 @@ def star_group(star, group):
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <star files>
-	merge star files (including grouping), need:
+	Merge star files (including grouping).
 	"""
 	
 	args_def = {'group':50, 'root':'zz'}
@@ -92,7 +92,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

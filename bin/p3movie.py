@@ -61,7 +61,7 @@ def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <movies>
 	Output lowdose/lowdose2 sum/movie.
-	needs:
+	Needs:
 	unblur (v1.0.2, Grant & Grigorieff, 2015)
 	EMAN2 (v2.12, Tang et al., 2007)
 	"""
@@ -78,7 +78,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

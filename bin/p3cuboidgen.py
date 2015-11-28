@@ -9,7 +9,7 @@ import pat3dem.main as p3m
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <image>
-	generate a cuboid on the grid of input image
+	Generate a cuboid on the grid of input image.
 	"""
 	
 	args_def = {'increment':-1, 'coord':'-1 '*6}
@@ -21,7 +21,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

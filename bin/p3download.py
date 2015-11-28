@@ -9,7 +9,7 @@ import pat3dem.cluster as p3c
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <d.txt>
-	download the file listed in the first line of d.txt, whenever the local disk is not full. then overwrite d.txt with the following lines
+	Download the file listed in the first line of d.txt, whenever the local disk is not full. Then overwrite d.txt with the following lines.
 	"""
 	
 	args_def = {'password':'/home/kailuyang/.pp'}	
@@ -20,7 +20,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

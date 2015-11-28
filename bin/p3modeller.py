@@ -16,16 +16,16 @@ def main():
 	
 	args_def = {'template':'0', 'chain':'A', 'num':1, 'ali':'0'}	
 	parser = argparse.ArgumentParser()
-	parser.add_argument("seq", nargs='*', help="Specify a file containing only the target sequence and, optionally, non-sequence lines with '>', if you wish.")
-	parser.add_argument("-t", "--template", type=str, help="Specify a pdb file as the template, by default '{}'.".format(args_def['template']))
-	parser.add_argument("-c", "--chain", type=str, help="Specify the chain of the template, by default '{}'".format(args_def['chain']))
-	parser.add_argument("-n", "--num", type=int, help="Specify how many models you want, by default '{}'".format(args_def['num']))
-	parser.add_argument("-a", "--ali", type=str, help="Specify your own alignment file, by default '{}'".format(args_def['ali']))
+	parser.add_argument("seq", nargs='*', help="specify a file containing only the target sequence and, optionally, non-sequence lines with '>', if you wish.")
+	parser.add_argument("-t", "--template", type=str, help="specify a pdb file as the template, by default '{}'.".format(args_def['template']))
+	parser.add_argument("-c", "--chain", type=str, help="specify the chain of the template, by default '{}'".format(args_def['chain']))
+	parser.add_argument("-n", "--num", type=int, help="specify how many models you want, by default '{}'".format(args_def['num']))
+	parser.add_argument("-a", "--ali", type=str, help="specify your own alignment file, by default '{}'".format(args_def['ali']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

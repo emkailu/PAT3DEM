@@ -9,7 +9,7 @@ import pat3dem.pdb as p3p
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <pdb1, pdb2>
-	output pdb1, whose bfactor is replaced by CA deviation between pdb1 and pdb2
+	Output pdb1, whose bfactor is replaced by CA deviation between pdb1 and pdb2.
 	"""
 	
 	args_def = {}
@@ -19,7 +19,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

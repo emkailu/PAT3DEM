@@ -70,15 +70,15 @@ def main():
 	
 	args_def = {'template':'0', 'chain':'A', 'gap':10}	
 	parser = argparse.ArgumentParser()
-	parser.add_argument("aln", nargs='*', help="Specify an alnfasta containing target sequence first and then template sequence.")
-	parser.add_argument("-t", "--template", type=str, help="Specify a pdb file as the template, by default '{}'. You need to do 'Select, Structure, nucleic acid and Save PDB' in Chimera.".format(args_def['template']))
-	parser.add_argument("-c", "--chain", type=str, help="Specify the chain of the template, by default '{}'".format(args_def['chain']))
+	parser.add_argument("aln", nargs='*', help="specify an alnfasta containing target sequence first and then template sequence.")
+	parser.add_argument("-t", "--template", type=str, help="specify a pdb file as the template, by default '{}'. You need to do 'Select, Structure, nucleic acid and Save PDB' in Chimera.".format(args_def['template']))
+	parser.add_argument("-c", "--chain", type=str, help="specify the chain of the template, by default '{}'".format(args_def['chain']))
 	parser.add_argument("-g", "--gap", type=int, help="specify the maximum gap you want, by default {}".format(args_def['gap']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

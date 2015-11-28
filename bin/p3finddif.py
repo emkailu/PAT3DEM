@@ -7,8 +7,8 @@ import argparse
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <file1 and file2>
-	compare file1 and file2, line by line (usually com/log/star files)
-	output the lines that are different in file1 and file2
+	Compare file1 and file2, line by line (usually com/log/star files).
+	Output the lines that are different in file1 and file2.
 	"""
 	
 	args_def = {}	
@@ -18,7 +18,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

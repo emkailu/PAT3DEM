@@ -16,14 +16,14 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("star", nargs='*', help="specify a star file to be screened")
 	parser.add_argument("-s", "--screen", type=str, help="specify the item, by which the star file will be screened, by default {} (no screening). e.g., 'OriginX'".format(args_def['screen']))
-	parser.add_argument("-c", "--cutoff", type=str, help="specify the cutoff, by default '{}' (-s and -sf will be combined).".format(args_def['cutoff']))
+	parser.add_argument("-c", "--cutoff", type=str, help="specify the cutoff, by default '{}' (-s and -sf will be combined)".format(args_def['cutoff']))
 	parser.add_argument("-sf", "--sfile", type=str, help="specify a file containing a keyword each line, by default '{}' (no screening). e.g., 'f.txt'".format(args_def['sfile']))
 	parser.add_argument("-w", "--white", type=int, help="specify as 1 if you provide a whitelist in -sf".format(args_def['white']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

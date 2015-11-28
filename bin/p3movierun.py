@@ -9,7 +9,7 @@ import pat3dem.cluster as p3c
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <f.txt>
-	run p3movie.py to process movies listed in f.txt (except the last one), and the movies will be deleted to save space
+	Run p3movie.py to process movies listed in f.txt (except the last one), and the movies will be deleted to save space.
 	"""
 	
 	args_def = {'apix':1.25, 'save':'0 0 0', 'save2':'0 0 0', 'xsuper':7420, 'delete':1}
@@ -24,7 +24,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

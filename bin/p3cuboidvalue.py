@@ -8,8 +8,8 @@ import pat3dem.main as p3m
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <images>
-	output the values of voxels within a coordinate range, 'x1 x2 y1 y2 z1 z2'
-	needs:
+	Output the values of voxels within a coordinate range, 'x1 x2 y1 y2 z1 z2'
+	Needs:
 	EMAN2 (v2.11, Tang et al., 2007)
 	"""
 	
@@ -21,7 +21,7 @@ def main():
 	
 	if len(sys.argv) == 1:
 		print "usage: " + usage
-		print "Please run '" + progname + " -h' for detailed options"
+		print "Please run '" + progname + " -h' for detailed options."
 		sys.exit(1)
 	# get default values
 	for i in args_def:

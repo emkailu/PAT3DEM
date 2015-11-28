@@ -13,7 +13,7 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 2)Output lowdose/lowdose2 sum/movie.
 ①Do not use filter, as it may affect CTF and SNR.
 ②Skip the first few frames due to beam induced drift, as it may affect CTF and SNR.
-③Lowdose2 e.g., if you have 100 25-frame movies and 100 50-frame movies, then do a 25-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them.
+③Lowdose2 e.g., if you have 100 25-frame movies and 100 50-frame movies, then do a 25-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them, which may not give better results than the 25-frame movie processing using the 200 movies.
 3)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally.
 
 3. CTF.

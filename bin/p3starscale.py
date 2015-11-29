@@ -8,7 +8,7 @@ import pat3dem.star as p3s
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <a star file>
-	Write a new star file after scaling or resetting offsets only.
+	Scale the OriginX/Y and DetectorPixelSize.
 	"""
 	
 	args_def = {'scale':1, 'reset':0}	

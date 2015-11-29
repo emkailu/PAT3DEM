@@ -34,7 +34,7 @@ def main():
 	# loop over all the input images
 	for image in args.image:
 		basename = os.path.basename(os.path.splitext(image)[0])
-		cmd = "p3ctf.py {} -a {} -v {} -c {} -ac {}".format(image, args.apix, args.voltage, args.cs, args.ac)
+		cmd = "p3ctf.py {} -a {} -v {} -c {} -ac {} -d {}".format(image, args.apix, args.voltage, args.cs, args.ac, args.dpsize)
 		walltime, cpu, ptile = 1, 1, 1
 		p3c.ada(cmd, basename, walltime, cpu, ptile)		
 		

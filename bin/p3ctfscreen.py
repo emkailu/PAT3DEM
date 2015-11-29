@@ -8,7 +8,7 @@ def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <ctfout.txt>
 	Screen based on the output of p3ctf.py.
-	If there is no '_ctffind3.log', you need to manually move it to bad/ folder.
+	If there is no '_ctffind3.log', you may need to rerun, manually check the quality and/or move it to bad/ folder.
 	Then use this script to check if the maxres or the best Thon ring is too low.
 	"""
 	

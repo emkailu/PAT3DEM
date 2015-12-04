@@ -5,6 +5,9 @@ import sys
 import argparse
 from moderna import *
 
+def newline(string, every=10):
+    return '\n'.join(string[i:i+every] for i in xrange(0, len(string), every))
+
 def replace(s):
 	return s.replace('-', '')
 
@@ -58,7 +61,7 @@ def dgap(str0, str1, gap):
 		start, end = index_start[i], index_end[i]+1
 		str0n += str0[start:end] + '_'
 		str1n += str1[start:end] + '_'
-	return str0n.strip('_'), str1n.strip('_')
+	return newline(str0n.strip('_')), newline(str1n.strip('_'))
 
 def main():
 	progname = os.path.basename(sys.argv[0])
@@ -96,8 +99,8 @@ def main():
 			seq += ['']
 			i += 1
 		seq[i] += line
-	seq0 = ''.join(seq[0].split('\n')[1:])
-	seq1 = ''.join(seq[1].split('\n')[1:])
+	seq0 = ''.join(seq[0].replace('\r', '\n').split('\n')[1:])
+	seq1 = ''.join(seq[1].replace('\r', '\n').split('\n')[1:])
 	str0 = ''
 	str1 = ''
 	for i in xrange(len(seq0)):

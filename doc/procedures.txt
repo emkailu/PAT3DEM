@@ -14,7 +14,7 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 ①Do not use filter, as it may affect CTF and SNR.
 ②Skip the first few (2 * 0.2 seconds) frames due to beam induced drift, as it may affect CTF and SNR.
 ③Lowdose2 e.g., if you have 100 25-frame movies and 100 50-frame movies, then do a 25-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them, which may not give better results than the 25-frame movie processing using the 200 movies.
-3)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally.
+3)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally (in a new tab).
 
 3. CTF.
 ***p3ctf.py
@@ -30,10 +30,10 @@ Screen based on the output of p3ctf.py.
 
 4. LOCATE PARTICLES.
 ***e2boxer
-1)Low-pass filter to see particles clearly.
+1)Low-pass filter to see particles clearly (also invert contrast).
 2)Erase: ①bad area; ②big no-particle area.
 3)Swarm tool:
-①Box size: ideally D+2R, R=λΔF/d, see Rosenthal & Henderson, 2003. D is diameter of particles, λ=0.025Å for 200 keV, ΔF is defocus, d is target resolution.
+①Box size: ideally D+2R, R=λΔF/d, see Rosenthal & Henderson, 2003. D is diameter of particles, λ=0.025Å for 200 keV (0.02 for 300), ΔF is defocus, d is target resolution. If the box size is too big, consider downscale the particles.
 ②Change threshold so that visible particles are not excluded.
 ③Delete bad boxes (if the whole micrograph is bad, clear boxes).
 ④Finish one micrograph before processing the next.
@@ -58,8 +58,8 @@ Screen micrographs based on outputs of p3movie.py and p3ctf.py, modulated by num
 
 ***relion_refine
 1)2D:
-①Not super-accurate.
-②Ignore CTFs until first peak.
+①Not super-accurate, so start with downscaled particles (Nyquist > 10Å).
+②Ignore CTFs until first peak when using unscaled particles.
 ③Clean background beyond particles is good.
 ④Density variation within particles is good.
 2)3D: Try different parameters to make it work.
@@ -73,9 +73,9 @@ Generate an initial model.
 
 ***relion_refine
 1)It's not always necessary to low-pass filter the initial model.
-2)Largest memory is used when each iteration is initialized.
-3)Movie processing: ①Masking is not necessary; ②Use running average to get enough SNR.
-4)Masking after several iterations may not be as optimal as from the first iteration.
+2)Largest memory is used when each iteration is being initialized.
+3)Movie processing: ①Partial masking (e.g. 50S) is not necessary; ②Use running average to get enough SNR.
+4)Partial masking (e.g. 50S) after several iterations may not be as optimal as from the first iteration.
 
 7. INTERPRET MAPS.
 ***p3xml.py

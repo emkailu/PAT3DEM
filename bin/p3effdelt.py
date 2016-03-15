@@ -5,24 +5,24 @@ import sys
 import argparse
 
 def gothr(lines):
-	if lines[0] not in ['      base_pair {\n', '      stacking_pair {\n']:
+	if lines[0].strip() not in ['base_pair {', 'stacking_pair {']:
 		return lines[0:1], lines[1:]
 	else:
 		for i, line in enumerate(lines):
-			if line == '      }\n':
+			if line.strip() == '}':
 				return lines[:i+1], lines[i+1:]
 
 def main():
 	progname = os.path.basename(sys.argv[0])
 	usage = progname + """ [options] <input>
-	Delete some residues in the input .eff files.
+	Delete specified residues in the input .eff files.
 	"""
 	
 	args_def = {'delt':'0 10001', 'drange':'0 0'}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("eff", nargs='*', help="specify .eff files to be processed")
-	parser.add_argument("-d", "--delt", type=str, help="specify what to delete, by default '{}'".format(args_def['delt']))
-	parser.add_argument("-dr", "--drange", type=str, help="specify a range to delete, by default '{}'".format(args_def['drange']))
+	parser.add_argument("-d", "--delt", type=str, help="specify residue numbers to delete, by default '{}'".format(args_def['delt']))
+	parser.add_argument("-dr", "--drange", type=str, help="specify a range (closed interval) to delete, by default '{}'".format(args_def['drange']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
@@ -36,7 +36,7 @@ def main():
 	# loop over all the input eff
 	delt = args.delt.split()
 	drange = args.drange.split()
-	for i in xrange(int(drange[0]), int(drange[1])):
+	for i in xrange(int(drange[0]), int(drange[1]) + 1):
 		delt += [str(i)]
 	for eff in args.eff:
 		basename = os.path.basename(os.path.splitext(eff)[0])

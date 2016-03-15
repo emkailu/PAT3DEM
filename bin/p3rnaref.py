@@ -11,7 +11,7 @@ def main():
 	Refine the rna.pdb into a density map. The strategy is to refine from low resolution to high resolution with strict restraints of secondary structures.
 	Needs:
 	relion (v1.4, Scheres, 2012)
-	Phenix
+	Phenix (dev-2328, Adams et al., 2010)
 	"""
 	
 	args_def = {'apix':1.25, 'res':'10 4', 'mrc':'zz.mrc', 'eff':''}	

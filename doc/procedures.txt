@@ -9,16 +9,18 @@ specimen_mag/subfolder/date/date_number, e.g.,
 Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorieff, 2015.
 
 ***p3movie.py
-1)Align frames: ITERATIVELY align each frame with the current best total sum.
-2)Output lowdose/lowdose2 sum/movie.
-①Do not use filter, as it may affect CTF and SNR.
-②Skip the first few (2 * 0.2 seconds) frames due to beam induced drift, as it may affect CTF and SNR.
-③Lowdose2 e.g., if you have 100 25-frame movies and 100 50-frame movies, then do a 25-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them, which may not give better results than the 25-frame movie processing using the 200 movies.
+1)Align frames: iteratively align each frame with the current best total sum.
+2)Output unfiltered sum/movie and filtered sum.
+①Unfiltered sum/movie should be used for CTF estimation.
+②Filtered sum should be used for initial classifications and refinement (not only more accurate, but also faster).
+③Unfiltered sum should be used for the last few iterations of the initial 3D refinement, followed by movie processing using unfiltered movie, if the highest resolution is desired.
+④Skip the first few (2 * 0.2 seconds) frames due to beam induced drift, as it may affect alignment, CTF and SNR.
+⑤Uniform, rather than mixed, dose should be used, e.g., if you have 100 20-frame movies (~25e/A^2, 200keV) and 100 50-frame movies, then do a 20-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them, which may not give better results than the 20-frame movie processing using the 200 movies.
 3)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally (in a new tab).
 
 3. CTF.
 ***p3ctf.py
-1)Based on unfiltered lowdose/lowdose2 movie.
+1)Based on unfiltered movie.
 2)Choose good parameters.
 ①Increase the minimum resolution to "just before" the first zero of the CTF.
 ②Increase the maximum resolution to approximately where ctffind reports detecting rings.

@@ -16,6 +16,7 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 ③Unfiltered sum should be used for the last few iterations of the initial 3D refinement, followed by movie processing using unfiltered movie, if the highest resolution is desired.
 ④Skip the first few (2 * 0.2 seconds) frames due to beam induced drift, as it may affect alignment, CTF and SNR.
 ⑤Uniform, rather than mixed, dose should be used, e.g., if you have 100 20-frame movies (~25e/A^2, 200keV) and 100 50-frame movies, then do a 20-frame movie processing using the 200 movies and a 50-frame movie processing using the 100 movies, finally merge them, which may not give better results than the 20-frame movie processing using the 200 movies.
+⑥Binning is better done at this step, on the entire micrographs, rather than the boxed particles. Do note that too small pixel size not only wastes computation, but may also negatively affects the resolution.
 3)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally (in a new tab).
 
 3. CTF.

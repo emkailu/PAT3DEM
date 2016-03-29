@@ -11,7 +11,7 @@ def main():
 	Run p3movie.py to process movies listed in f.txt, and the movies will be deleted to save space.
 	"""
 	
-	args_def = {'apix':1.25, 'voltage':200, 'time':200, 'rate':8, 'save':'0 0 0', 'xsuper':7420, 'delete':1}
+	args_def = {'apix':1.25, 'voltage':200, 'time':200, 'rate':8, 'save':'0 0 0', 'xsuper':7420, 'scale':1, 'delete':1}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("f", nargs='*', help="specify the txt file used for p3download.py")
 	parser.add_argument("-a", "--apix", type=float, help="specify apix, by default {}".format(args_def['apix']))
@@ -20,6 +20,7 @@ def main():
 	parser.add_argument("-r", "--rate", type=float, help="specify dose rate in e/pix/s (counting pixel, not superresolution), by default {}. if specified as 0, no filtered sum will be output".format(args_def['rate']))
 	parser.add_argument("-s", "--save", type=str, help="save a specified number of aligned frames, by default '{}', which means do not save. e.g., '0 19 4' means the saved movie starts from frame #0, ends at #19, in total (19-0+1)/4 = 5 frames. if 19 >= the real number of frames of the movie, skip".format(args_def['save']))
 	parser.add_argument("-x", "--xsuper", type=int, help="specify the x dimension of superresolution images, by default {}".format(args_def['xsuper']))
+	parser.add_argument("-sc", "--scale", type=float, help="specify the down scaling factor, by default {}. e.g., 1.2 means counting images will be downscaled by 1.2 times, superresolution 2.4".format(args_def['scale']))
 	parser.add_argument("-d", "--delete", type=int, help="delete (!!!) the raw movie (specify as 1), by default {}, which means do not delete".format(args_def['delete']))
 	args = parser.parse_args()
 	
@@ -46,7 +47,7 @@ def main():
 		lines = f2_r.readlines()
 	# run line #i if line #(i+1) exists, the last line will be ignored
 	walltime, cpu, ptile = 1, 1, 1
-	option = "-a {} -v {} -t {} -r {} -s '{}' -x {} -d {}".format(args.apix, args.voltage, args.time, args.rate, args.save, args.xsuper, args.delete)
+	option = "-a {} -v {} -t {} -r {} -s '{}' -x {} -sc {} -d {}".format(args.apix, args.voltage, args.time, args.rate, args.save, args.xsuper, args.scale, args.delete)
 	for i, l in enumerate(lines[:-1]):
 		l = l.strip()
 		l2 = lines[i+1].strip()

@@ -11,6 +11,20 @@ def file_base(movie):
 	# return the filename and basename, exclude '.p3'
 	return movie, os.path.basename(os.path.splitext(movie)[0]).replace('.p3', '')
 
+def scale(movie):
+	d=EMData(movie,0)
+	if d["nx"] == args.xsuper:
+		sc = com_par['super']
+	else:
+		sc = com_par['count']
+	movie, basename = file_base(movie)
+	m = '{}_{}x.p3.mrcs'.format(basename, sc)
+	for i in xrange(com_par['nimg']):
+		d=EMData(movie, i+com_par['first'])
+		d.process_inplace("math.fft.resample",{"n":sc})
+		d.write_image(m, i)
+	return file_base(m)	
+
 def run_unblur(in_movie, root, com_par):
 	unblur = 'unblur << eof'
 	basename = os.path.basename(os.path.splitext(in_movie)[0])
@@ -57,7 +71,7 @@ def main():
 	'EMAN2' python module (v2.11, Tang et al., 2007)
 	"""
 	
-	args_def = {'apix':1.25, 'voltage':200, 'time':200, 'rate':8, 'save':'0 0 0', 'xsuper':7420, 'delete':0}
+	args_def = {'apix':1.25, 'voltage':200, 'time':200, 'rate':8, 'save':'0 0 0', 'xsuper':7420, 'scale':1, 'delete':0}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("movie", nargs='*', help="specify movies to be processed")
 	parser.add_argument("-a", "--apix", type=float, help="specify apix, by default {}".format(args_def['apix']))
@@ -66,6 +80,7 @@ def main():
 	parser.add_argument("-r", "--rate", type=float, help="specify dose rate in e/pix/s (counting pixel, not superresolution), by default {}. if specified as 0, no filtered sum will be output".format(args_def['rate']))
 	parser.add_argument("-s", "--save", type=str, help="save a specified number of aligned frames, by default '{}', which means do not save. e.g., '0 19 4' means the saved movie starts from frame #0, ends at #19, in total (19-0+1)/4 = 5 frames. if 19 >= the real number of frames of the movie, skip".format(args_def['save']))
 	parser.add_argument("-x", "--xsuper", type=int, help="specify the x dimension of superresolution images, by default {}".format(args_def['xsuper']))
+	parser.add_argument("-sc", "--scale", type=float, help="specify the down scaling factor, by default {}. e.g., 1.2 means counting images will be downscaled by 1.2 times, superresolution 2.4".format(args_def['scale']))
 	parser.add_argument("-d", "--delete", type=int, help="delete (!!!) the raw movie (specify as 1), by default {}, which means do not delete".format(args_def['delete']))
 	args = parser.parse_args()
 	
@@ -82,7 +97,7 @@ def main():
 	apix = str(args.apix)
 	voltage = str(args.voltage)
 	first, last, avg_bin = args.save.split()
-	com_par = {'dose':dose, 'apix':apix, 'voltage':voltage, 'save':args.save, 'first':int(first), 'last':int(last), 'avg_bin':int(avg_bin)}
+	com_par = {'dose':dose, 'apix':apix, 'voltage':voltage, 'save':args.save, 'super':args.scale*2, 'count':args.scale, 'first':int(first), 'last':int(last), 'avg_bin':int(avg_bin)}
 	# loop over all the input movies
 	for movie in args.movie:
 		movie_raw = movie
@@ -101,20 +116,7 @@ def main():
 			continue
 		if args.save != '0 0 0':
 			com_par['nimg'] = com_par['last']-com_par['first']+1
-		d=EMData(movie,0)
-		if d["nx"] == args.xsuper:
-			m_bin = basename+'_2x.p3.mrcs'
-			for i in xrange(com_par['nimg']):
-				d=EMData(movie, i+com_par['first'])
-				d.process_inplace("math.fft.resample",{"n":2})
-				d.write_image(m_bin, i)
-			movie, basename = file_base(m_bin)
-		else:
-			m_mrcs = basename+'_1x.p3.mrcs'
-			for i in xrange(com_par['nimg']):
-				d=EMData(movie, i+com_par['first'])
-				d.write_image(m_mrcs, i)
-			movie, basename = file_base(m_mrcs)
+		movie, basename = scale(movie)
 		# link mrcs as mrc format
 		in_movie = basename + '.p3.mrc'
 		os.symlink(movie, in_movie)

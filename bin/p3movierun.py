@@ -14,7 +14,7 @@ def main():
 	args_def = {'apix':1.25, 'voltage':200, 'time':200, 'rate':8, 'save':'0 0 0', 'xsuper':7420, 'scale':1, 'delete':1}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("f", nargs='*', help="specify the txt file used for p3download.py")
-	parser.add_argument("-a", "--apix", type=float, help="specify apix, by default {}".format(args_def['apix']))
+	parser.add_argument("-a", "--apix", type=float, help="specify counting apix before scaling, by default {}".format(args_def['apix']))
 	parser.add_argument("-v", "--voltage", type=int, help="specify the voltage (kV), by default {}".format(args_def['voltage']))
 	parser.add_argument("-t", "--time", type=float, help="specify exposure time per frame in ms, by default {}".format(args_def['time']))
 	parser.add_argument("-r", "--rate", type=float, help="specify dose rate in e/pix/s (counting pixel, not superresolution), by default {}. if specified as 0, no filtered sum will be output".format(args_def['rate']))

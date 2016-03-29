@@ -11,9 +11,9 @@ def file_base(movie):
 	# return the filename and basename, exclude '.p3'
 	return movie, os.path.basename(os.path.splitext(movie)[0]).replace('.p3', '')
 
-def scale(movie):
+def scale(movie, com_par):
 	d=EMData(movie,0)
-	if d["nx"] == args.xsuper:
+	if d["nx"] == com_par['xsuper']:
 		sc = com_par['super']
 	else:
 		sc = com_par['count']
@@ -74,7 +74,7 @@ def main():
 	args_def = {'apix':1.25, 'voltage':200, 'time':200, 'rate':8, 'save':'0 0 0', 'xsuper':7420, 'scale':1, 'delete':0}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("movie", nargs='*', help="specify movies to be processed")
-	parser.add_argument("-a", "--apix", type=float, help="specify apix, by default {}".format(args_def['apix']))
+	parser.add_argument("-a", "--apix", type=float, help="specify counting apix before scaling, by default {}".format(args_def['apix']))
 	parser.add_argument("-v", "--voltage", type=int, help="specify the voltage (kV), by default {}".format(args_def['voltage']))
 	parser.add_argument("-t", "--time", type=float, help="specify exposure time per frame in ms, by default {}".format(args_def['time']))
 	parser.add_argument("-r", "--rate", type=float, help="specify dose rate in e/pix/s (counting pixel, not superresolution), by default {}. if specified as 0, no filtered sum will be output".format(args_def['rate']))
@@ -94,10 +94,9 @@ def main():
 			args.__dict__[i] = args_def[i]
 	# get common parameters
 	dose = str(args.time/1000.0 * args.rate / args.apix ** 2)
-	apix = str(args.apix)
 	voltage = str(args.voltage)
 	first, last, avg_bin = args.save.split()
-	com_par = {'dose':dose, 'apix':apix, 'voltage':voltage, 'save':args.save, 'super':args.scale*2, 'count':args.scale, 'first':int(first), 'last':int(last), 'avg_bin':int(avg_bin)}
+	com_par = {'dose':dose, 'apix':str(args.apix * args.scale), 'voltage':voltage, 'save':args.save, 'xsuper':args.xsuper, 'super':args.scale*2, 'count':args.scale, 'first':int(first), 'last':int(last), 'avg_bin':int(avg_bin)}
 	# loop over all the input movies
 	for movie in args.movie:
 		movie_raw = movie
@@ -116,7 +115,7 @@ def main():
 			continue
 		if args.save != '0 0 0':
 			com_par['nimg'] = com_par['last']-com_par['first']+1
-		movie, basename = scale(movie)
+		movie, basename = scale(movie, com_par)
 		# link mrcs as mrc format
 		in_movie = basename + '.p3.mrc'
 		os.symlink(movie, in_movie)

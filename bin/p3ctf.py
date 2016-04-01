@@ -55,23 +55,24 @@ def ctf_run(image, com_par):
 	# if ctftxt does not exist, start an initial run
 	if not os.path.isfile(ctftxt):
 		com_par['movie'] = 'yes\n{}'.format(com_par['nimg'])
-		com_par['minres'], com_par['maxres'], com_par['mindef'], com_par['maxdef'], com_par['step'] = 30, 5, 5000, 50000, 500
+		com_par['minres'], com_par['maxres'], com_par['mindef'], com_par['maxdef'], com_par['step'] = 50, 5, 1000, 50000, 500
 		ctf(image, com_par)
 	elif os.path.isfile(ctftxt):
 		p1_minres, p1_maxres, p1_mindef, p1_maxdef, p2_maxres, p2_mindef, p2_maxdef = ctf_read(ctftxt)
 		# set minres based on defocus
-		if p2_maxdef > 12000:
+		if p2_maxdef > 25000:
+			p2_minres = 40.0
+		elif p2_maxdef > 12000:
 			p2_minres = 30.0
 		elif p2_maxdef > 7000:
 			p2_minres = 25.0
 		else:
 			p2_minres = 20.0
-		# if parameters went wrong
-		if p2_minres - p2_maxres < 5:
-			print 'Please check {}!'.format(ctftxt)
-			sys.exit()
-		# elif parameters converged
-		elif p2_minres == p1_minres and p2_maxres == p1_maxres and p2_mindef > p1_mindef and p2_maxdef < p1_maxdef or com_par['iter'] == 10:
+		# for some bad images, you have to increase minres
+		while p2_minres <= p2_maxres:
+			p2_minres = p2_maxres + 1
+		# if parameters converged
+		if p2_minres == p1_minres and p2_maxres == p1_maxres and p2_mindef > p1_mindef and p2_maxdef < p1_maxdef or com_par['iter'] == 10:
 			# test avg frames
 			com_par['minres'], com_par['maxres'], com_par['mindef'], com_par['maxdef'], com_par['step'] = p2_minres, p2_maxres, p2_mindef-1000, p2_maxdef+2000, 100
 			for i in xrange(1, com_par['nimg']):
@@ -131,7 +132,7 @@ def main():
 	usage = progname + """ [options] <movie.mrcs>
 	Run ctffind4 until parameters converge.
 	Needs:
-	ctffind (v4.0.16, Rohou & Grigorieff, 2015)
+	'ctffind' command (v4.0.16, Rohou & Grigorieff, 2015)
 	"""
 	
 	args_def = {'apix':1.25, 'voltage':200, 'cs':2, 'ac':0.1, 'dpsize':5}	

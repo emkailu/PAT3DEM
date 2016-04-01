@@ -10,7 +10,7 @@ def main():
 	usage = progname + """ [options] <movie.mrcs>
 	Run p3ctf.py on cluster.
 	Needs:
-	ctffind (v4.0.16, Rohou & Grigorieff, 2015)
+	'ctffind' command (v4.0.16, Rohou & Grigorieff, 2015)
 	"""
 	
 	args_def = {'apix':1.25, 'voltage':200, 'cs':2, 'ac':0.1, 'dpsize':5}	
@@ -32,10 +32,11 @@ def main():
 		if args.__dict__[i] == None:
 			args.__dict__[i] = args_def[i]
 	# loop over all the input images
+	walltime, cpu, ptile = 1, 1, 1
+	option = '-a {} -v {} -c {} -ac {} -d {}'.format(args.apix, args.voltage, args.cs, args.ac, args.dpsize)
 	for image in args.image:
 		basename = os.path.basename(os.path.splitext(image)[0])
-		cmd = "p3ctf.py {} -a {} -v {} -c {} -ac {} -d {}".format(image, args.apix, args.voltage, args.cs, args.ac, args.dpsize)
-		walltime, cpu, ptile = 1, 1, 1
+		cmd = "p3ctf.py {} {}".format(image, option)
 		p3c.ada(cmd, basename, walltime, cpu, ptile)		
 		
 if __name__ == '__main__':

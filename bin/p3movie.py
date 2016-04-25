@@ -28,8 +28,8 @@ def scale(movie, com_par):
 def run_unblur(in_movie, root, com_par):
 	unblur = 'unblur << eof'
 	basename = os.path.basename(os.path.splitext(in_movie)[0])
-	# remove '.p3', '_unfiltd_movie', if it's in the basename
-	basename = basename.replace('.p3', '').replace('_unfiltd_movie', '')
+	# remove '.p3', if it's in the basename
+	basename = basename.replace('.p3', '')
 	out = basename + '_' + root
 	out_sum = out + '.mrc'
 	out_shift = out + '_shifts.txt'
@@ -37,19 +37,35 @@ def run_unblur(in_movie, root, com_par):
 	com = out + '_unblur.com'
 	log = out + '_unblur.log'
 	expert = 'no'
-	if root == 'unfiltd':
-		save_movie = 'yes\n'+out_movie
-		dose_filter = 'no'		
-	elif root == 'filtered':
-		pre_exp = str(float(com_par['dose']) * com_par['first'])
-		dose_filter = '\n'.join(['yes', com_par['dose'], com_par['voltage'], pre_exp])
-		save_movie = 'no'
+	save_movie = 'yes\n'+out_movie
+	dose_filter = 'no'
 	with open(com, 'w') as write_com:
 		write_com.write('\n'.join([unblur, in_movie, str(com_par['nimg']), out_sum, out_shift, com_par['apix'], dose_filter, save_movie, expert, 'eof']))
 	with open(log, 'w') as write_log:
 		subprocess.call(['sh', com], stdout=write_log, stderr=subprocess.STDOUT)
 	return out_movie
 
+def run_summovie(in_movie, root, com_par):
+	summovie = 'summovie << eof'
+	basename = os.path.basename(os.path.splitext(in_movie)[0])
+	# remove '.p3', if it's in the basename
+	basename = basename.replace('.p3', '')
+	out = basename + '_' + root
+	out_sum = out + '.mrc'
+	in_shift = basename + '_unfiltd_shifts.txt'
+	our_frc = out + '_frc.txt'
+	nimg = str(com_par['nimg'])
+	first = '1'
+	last = nimg
+	com = out + '_summovie.com'
+	log = out + '_summovie.log'
+	pre_exp = str(float(com_par['dose']) * com_par['first'])
+	dose_filter = '\n'.join(['yes', com_par['dose'], com_par['voltage'], pre_exp, 'yes'])
+	with open(com, 'w') as write_com:
+		write_com.write('\n'.join([summovie, in_movie, nimg, out_sum, in_shift, our_frc, first, last, com_par['apix'], dose_filter, 'eof']))
+	with open(log, 'w') as write_log:
+		subprocess.call(['sh', com], stdout=write_log, stderr=subprocess.STDOUT)
+		
 def get_bin(in_movie, com_par):
 	# get bin from _unfiltd_movie.p3.mrcs
 	bin_movie = in_movie.replace('_movie.p3.mrcs', '_movie.mrcs')
@@ -67,7 +83,7 @@ def main():
 	usage = progname + """ [options] <movies>
 	Output unfiltered sum/movie and filtered sum.
 	Needs:
-	'unblur' command (v1.0.2, Grant & Grigorieff, 2015)
+	'unblur' & 'summovie' command (v1.0.2, Grant & Grigorieff, 2015)
 	'EMAN2' python module (v2.11, Tang et al., 2007)
 	"""
 	
@@ -119,16 +135,16 @@ def main():
 		# link mrcs as mrc format
 		in_movie = basename + '.p3.mrc'
 		os.symlink(movie, in_movie)
-		# unblur run 1: align frames, root = 'unfiltd'
+		# unblur: align frames, root = 'unfiltd'
 		out_movie = run_unblur(in_movie, 'unfiltd', com_par)
+		# summovie: apply dose filter, root = 'filtered'
+		if args.rate != 0:
+			run_summovie(in_movie, 'filtered', com_par)
 		# get bin
 		if args.save != '0 0 0':
 			in_movie = out_movie.replace('.mrc', '.mrcs')
 			os.symlink(out_movie, in_movie)			
 			get_bin(in_movie, com_par)
-		# unblur run 2: apply dose filter, root = 'filtered'
-		if args.rate != 0:
-			run_unblur(out_movie, 'filtered', com_par)
 		# delete intermediate files, they contain '.p3.'
 		for i in glob.glob(basename_raw + '*.p3.*'):
 			os.unlink(i)

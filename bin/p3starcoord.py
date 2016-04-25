@@ -59,15 +59,15 @@ def main():
 							x, y = float(line[star_dict['_rlnCoordinateX']]), float(line[star_dict['_rlnCoordinateY']])
 							# calculate new coord
 							if '_rlnOriginX' in star_dict:
-								x -= int(float(line[star_dict['_rlnOriginX']]))
-								y -= int(float(line[star_dict['_rlnOriginY']]))
+								x -= float(line[star_dict['_rlnOriginX']])
+								y -= float(line[star_dict['_rlnOriginY']])
 							# exclude the edge
 							if args.edge != -1:
 								if not args.edge<=x<=args.x-args.edge or not args.edge<=y<=args.y-args.edge:
 									continue
 							o_write.write('{:>12} '.format(x) + '{:>12} \n'.format(y))
 							if args.box != -1:
-								o_box_write.write('{}'.format(x-args.box/2) + '\t{}'.format(y-args.box/2) + '\t{}'.format(args.box) * 2 + '\n')
+								o_box_write.write('{}'.format(x-args.box/2.0) + '\t{}'.format(y-args.box/2.0) + '\t{}'.format(args.box) * 2 + '\n')
 						o_write.write('\n')
 					if args.box != -1:
 						o_box_write.close()
@@ -85,7 +85,7 @@ def main():
 						if args.edge != -1:
 							if not args.edge<=x<=args.x-args.edge or not args.edge<=y<=args.y-args.edge:
 								continue
-						o_box_write.write('{}'.format(x-args.box/2) + '\t{}'.format(y-args.box/2) + '\t{}'.format(args.box) * 2 + '\n')
+						o_box_write.write('{}'.format(x-args.box/2.0) + '\t{}'.format(y-args.box/2.0) + '\t{}'.format(args.box) * 2 + '\n')
 			
 if __name__ == '__main__':
 	main()

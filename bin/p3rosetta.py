@@ -14,7 +14,7 @@ def main():
 	args_def = {'protocol':'refine.xml', 'repeat':100, 'resolution':4, 'rosetta3':'/home/kailu/compile/rosetta_bin_linux_2015.39.58186_bundle/main'}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("pdb", nargs='*', help="specify pdb to be processed")
-	parser.add_argument("-p", "--protocol", type=int, help="specify protocol, by default {}".format(args_def['protocol']))
+	parser.add_argument("-p", "--protocol", type=str, help="specify protocol, by default {}".format(args_def['protocol']))
 	parser.add_argument("-r", "--repeat", type=int, help="specify repeat, by default {}".format(args_def['repeat']))
 	parser.add_argument("-re", "--resolution", type=float, help="specify reslution, by default {}".format(args_def['resolution']))	
 	parser.add_argument("-r3", "--rosetta3", type=str, help="specify rosetta3, by default {}".format(args_def['rosetta3']))

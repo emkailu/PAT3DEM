@@ -49,6 +49,8 @@ def main():
 		if '>' not in line:
 			line = line.strip()
 			seq += line
+	# uppercase
+	seq = seq.upper()
 	with open(ali, 'w') as ali_write:
 		ali_write.write('>P1;{}\n'.format(ali_base))
 		ali_write.write('sequence:{}:::::::0.00: 0.00\n'.format(ali_base))

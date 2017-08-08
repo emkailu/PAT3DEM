@@ -34,7 +34,7 @@ def main():
 			args.__dict__[i] = args_def[i]
 	# repeat
 	star = args.star[0]
-	star_dict = p3s.star_parse(star, 'data_images')
+	star_dict = p3s.star_parse(star, 'data_')
 	header = star_dict['data_'] + star_dict['loop_']
 	for i in xrange(args.repeat):
 		# root name for output

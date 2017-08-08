@@ -13,7 +13,7 @@ specimen_mag/subfolder/date/date_number, e.g.,
 ***mag_distortion_correct
 Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorieff, 2015.
 
-***p3movie.py
+***p3movie.py (With GPU, use MotionCor2 but still follow the tips below!)
 1)Align frames: iteratively align each frame with the current best total sum.
 2)Output unfiltered sum/movie and filtered sum.
 ①Unfiltered sum/movie should be used for CTF estimation.
@@ -25,7 +25,7 @@ Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorief
 3)For faster processing (at the speed of data transfer), submit a job running ***p3movierun.py to cluster, and then run ***p3downloadrun.sh locally (in a new tab).
 
 3. CTF.
-***p3ctf.py
+***p3ctf.py (With GPU, use Gctf but still follow the tips below!)
 1)Based on unfiltered movie.
 2)Choose good parameters.
 ①Increase the minimum resolution to "just before" the first zero of the CTF.
@@ -84,6 +84,7 @@ Generate an initial model.
 2)Largest memory is used when each iteration is being initialized.
 3)Movie processing: ①Partial masking (e.g. 50S) is not necessary; ②Use running average to get enough SNR.
 4)Partial masking (e.g. 50S) after several iterations may not be as optimal as from the first iteration.
+5)After the "final" refinement, further skip-align classification (followed by refinement with limited angular search; use the same offset range and step as the previous "final" refinement) may help.
 
 7. INTERPRET MAPS.
 ***p3xml.py

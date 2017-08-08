@@ -33,7 +33,7 @@ def main():
 		lines = p.readlines()
 	ATM = []
 	for i in lines:
-		if i[:6].strip() in ['ATOM', 'HETATM']:
+		if i[:4] == 'ATOM' or i[:6] == 'HETATM': 
 			ATM += [i]	
 	basename = os.path.basename(os.path.splitext(args.pdb)[0])
 	a = args.apix

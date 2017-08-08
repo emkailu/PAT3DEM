@@ -36,9 +36,9 @@ def main():
 	basename2 = os.path.basename(os.path.splitext(pdb2)[0])
 	with open(basename1 + '_dev_' + basename2 + '.pdb', 'w') as w_pdb:
 		for i in pdb1_CA:
-			if i[:27] in pdb_same:
+			if i[17:27] in pdb_same:
 				for j in pdb2_CA:
-					if j[:27] == i[:27]:break
+					if j[17:27] == i[17:27]:break
 				(x1, y1, z1), (x2, y2, z2) = p3p.get_coord(i), p3p.get_coord(j)
 				dev = math.sqrt((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2)
 				i = list(i)

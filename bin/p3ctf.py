@@ -141,7 +141,7 @@ def main():
 	parser.add_argument("-a", "--apix", type=float, help="specify apix, by default {}".format(args_def['apix']))
 	parser.add_argument("-v", "--voltage", type=int, help="specify the voltage (kV), by default {}".format(args_def['voltage']))
 	parser.add_argument("-c", "--cs", type=float, help="specify spherical abberration, by default {}".format(args_def['cs']))
-	parser.add_argument("-ac", "--ac", type=float, help="specify amplitude contrast, by default {}".format(args_def['ac']))
+	parser.add_argument("-ac", "--ac", type=float, help="specify amplitude contrast, pure ice 0.04, carbon 0.1, by default {}".format(args_def['ac']))
 	parser.add_argument("-d", "--dpsize", type=float, help="specify detector pixel size (um), by default {}".format(args_def['dpsize']))
 	args = parser.parse_args()
 	

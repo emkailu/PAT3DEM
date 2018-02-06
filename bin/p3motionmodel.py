@@ -37,16 +37,51 @@ def main():
 	# store the maps generated from pdbs
 	c_p['m'] = []
 	for pdb in args.pdb:
-		c_p['m'] += [p3p.pdb2mrc(pdb,args.apix,args.res,False,c_p['box'],None,True)]
-	minimize(c_p)
+		mrc = p3p.pdb2mrc(pdb,args.apix,args.res,False,c_p['box'],None,True)
+		c_p['m'] += [mrc]
+	minimize2(c_p)
 			
 def minimize(c_p):
 	# brute force
 	f = lambda x: ccc(x, c_p)
 	b, n = c_p['box']/2, len(c_p['m'])
-	rranges = [slice(0, 360, 60), slice(0, 180, 30), slice(0, 360, 60), slice(-b, b, b), slice(-b, b, b), slice(-b, b, b)] * n
+	rranges = [slice(0, 360, 30), slice(0, 180, 15), slice(0, 360, 30), slice(-b, b, b/2), slice(-b, b, b/2), slice(-b, b, b/2)] * n
 	c_p['c'] = 3 # store global minima
-	resbrute = opt.brute(f, rranges, full_output=True, finish=opt.fmin)
+	res = opt.brute(f, rranges, full_output=True, finish=opt.fmin)
+	
+class RandomDisplacementBounds(object):
+	"""random displacement with bounds"""
+	def __init__(self, xmin, xmax, stepsize=10):
+		self.xmin = xmin
+		self.xmax = xmax
+		self.stepsize = stepsize
+    
+	def __call__(self, x):
+		"""take a random step but ensure the new position is within the bounds"""
+		while True:
+		    # this could be done in a much more clever way, but it will work for example purposes
+			xnew = x + np.random.uniform(-self.stepsize, self.stepsize, np.shape(x))
+			if np.all(xnew < self.xmax) and np.all(xnew > self.xmin):
+				break
+		return xnew
+	
+def minimize2(c_p):
+	#basinhopping
+	f = lambda x: ccc(x, c_p)
+	b, n = c_p['box']/2, len(c_p['m'])
+	# the starting point
+	x0 = [0, 0, 0, 0, 0, 0] * n
+	# the bounds
+	xmin = [0, 0, 0, -b, -b, -b]*n
+	xmax = [360, 360, 360, b, b, b]*n
+	# rewrite the bounds in the way required by L-BFGS-B
+	bounds = [(low, high) for low, high in zip(xmin, xmax)]
+	# use method L-BFGS-B because the problem is smooth and bounded
+	minimizer_kwargs = dict(method="L-BFGS-B", bounds=bounds)
+	# define the new step taking routine and pass it to basinhopping
+	take_step = RandomDisplacementBounds(xmin, xmax)	
+	c_p['c'] = 3 # store global minima
+	res = opt.basinhopping(f, x0, minimizer_kwargs=minimizer_kwargs, take_step=take_step, niter=10000)	
 	
 def ccc(x, c_p):
 	avg=Averagers.get("mean")

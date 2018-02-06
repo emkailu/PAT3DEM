@@ -14,7 +14,7 @@ def main():
 	args_def = {'scale':1, 'reset':0}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("star", nargs='*', help="specify a star file to be processed")
-	parser.add_argument("-s", "--scale", type=float, help="specify the down scaling factor, by default {}. e.g., 0.5 means downscaled by 0.5 times".format(args_def['scale']))
+	parser.add_argument("-s", "--scale", type=float, help="specify the down scaling factor, by default {}. e.g., 0.5 means downscaled by 0.5 times. It should be new_apix/old_apix.".format(args_def['scale']))
 	parser.add_argument("-r", "--reset", type=float, help="specify as 1 to reset the _rlnOriginX and _rlnOriginY only (will not change _rlnDetectorPixelSize), by default {}".format(args_def['reset']))
 	args = parser.parse_args()
 	

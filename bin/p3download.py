@@ -29,12 +29,14 @@ def main():
 	# get common parameters
 	with open(args.password) as f:
 		p = f.read().strip()
-	com_par = {'p':p}
+	c_p = {'p':p}
+	'''
 	# wait until local disk and nfile are enough
 	disk, nfile = p3c.ada_quota()
 	while disk < 200 or nfile < 1000:
 		time.sleep(600)
 		disk, nfile = p3c.ada_quota()
+	'''
 	# get the file name	
 	with open(args.f[0]) as f:
 		lines = f.readlines()
@@ -43,7 +45,7 @@ def main():
 	j = './' + i.replace('\\','/').split('/')[-1]
 	# download from chiu to ada, only if file does not exist
 	if not os.path.isfile(j):
-		p3c.chiu_download(i, j, com_par)
+		p3c.chiu_download(i, j, c_p)
 		# overwrite d.txt
 		if len(lines) > 1:
 			with open(args.f[0], 'w') as f:

@@ -11,13 +11,14 @@ def main():
 	Output the coordinates from star files. Origin offsets will be considered as float.
 	"""
 	
-	args_def = {'box':-1, 'edge':-1, 'x':3710, 'y':3838}	
+	args_def = {'box':-1, 'edge':-1, 'x':3710, 'y':3838, 'flip':''}	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("star", nargs='*', help="specify star files to be processed")
 	parser.add_argument("-b", "--box", type=int, help="specify a box size (in pixel) for output, by default {} (output .star only)".format(args_def['box']))
 	parser.add_argument("-e", "--edge", type=int, help="specify a distance (in pixel) between box center and micrograph edge, by default {} (don't exclude edge)".format(args_def['edge']))
 	parser.add_argument("-x", "--x", type=int, help="provide the x dimension (in pixel) of micrographs, by default {}. This option is unnessary unless you use the --edge option".format(args_def['x']))
 	parser.add_argument("-y", "--y", type=int, help="provide the y dimension (in pixel) of micrographs, by default {}".format(args_def['y']))
+	parser.add_argument("-f", "--flip", type=str, help="flip in which direction, by default {}. i.e., if flip in y (upside down), then y_new = args.y - y_old, do specify the correct args.x and args.y".format(args_def['flip']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
@@ -61,6 +62,11 @@ def main():
 							if '_rlnOriginX' in star_dict:
 								x -= float(line[star_dict['_rlnOriginX']])
 								y -= float(line[star_dict['_rlnOriginY']])
+							# flip
+							if args.flip == 'x':
+								x = args.x - x
+							elif args.flip == 'y':
+								y = args.y - y
 							# exclude the edge
 							if args.edge != -1:
 								if not args.edge<=x<=args.x-args.edge or not args.edge<=y<=args.y-args.edge:

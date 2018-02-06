@@ -13,7 +13,7 @@ specimen_mag/subfolder/date/date_number, e.g.,
 ***mag_distortion_correct
 Correct anisotropic mag distortion, see Zhao et al., 2015, and Grant & Grigorieff, 2015.
 
-***p3movie.py (With GPU, use MotionCor2 but still follow the tips below!)
+***p3movie.py (With GPU, use MotionCor2 but still follow the tips below! Be careful with MotionCor2 when the particles are sparse.)
 1)Align frames: iteratively align each frame with the current best total sum.
 2)Output unfiltered sum/movie and filtered sum.
 ①Unfiltered sum/movie should be used for CTF estimation.
@@ -38,7 +38,7 @@ Screen based on the output of p3ctf.py.
 
 4. LOCATE PARTICLES.
 ***e2boxer
-1)Low-pass filter to see particles clearly (also invert contrast).
+1)Low-pass (~10/15/20Å) filter to see particles clearly (also invert contrast) (e2proc2d.py --process filter.lowpass.gauss:cutoff_freq=0.067 --mult -1).
 2)Erase: ①bad area; ②big no-particle area.
 3)Swarm tool:
 ①Box size: ideally D+2R, R=λΔF/d, see Rosenthal & Henderson, 2003. D is diameter of particles, λ=0.025Å for 200 keV (0.02 for 300), ΔF is defocus, d is target resolution. If the box size is too big, consider downscale the particles.

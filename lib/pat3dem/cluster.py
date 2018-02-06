@@ -3,6 +3,17 @@
 import subprocess
 import paramiko
 
+def terra(cmd, title, walltime, gpu, ptile):
+	# submit a job to terra
+	# title is usually the root name for output
+	header = "#!/bin/bash\n#SBATCH --export=NONE\n#SBATCH --get-user-env=L\n#SBATCH --job-name={}\n#SBATCH --time={}:00:00\n#SBATCH --ntasks={}\n#SBATCH --ntasks-per-node={}\n#SBATCH --mem=20G\n#SBATCH --output={}.%j\n#SBATCH -A 122861618739\n#SBATCH --gres=gpu:1\n#SBATCH -p gpu\nsource ~/.bashrc\n\n".format(title, walltime, gpu, ptile, title)
+	with open(title+'.job', 'w') as job:
+		job.write(header)
+		job.write('{} > {}.log\n'.format(cmd, title))
+	with open('zz.sh', 'w') as zz:
+		zz.write('sbatch {}.job\n'.format(title))
+	subprocess.call(['sh', 'zz.sh'])
+	
 def ada(cmd, title, walltime, cpu, ptile):
 	# submit a job to ada
 	# title is usually the root name for output
@@ -37,12 +48,12 @@ def ada_quota():
 	d = d_total - d_used
 	return d, nfile
 
-def chiu_download(i, j, com_par):
+def chiu_download(i, j, c_p):
 	# download a file specified by i from chiu to a local file specified by j
 	# both i and j include path
 	s=paramiko.SSHClient()
 	s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	s.connect("chiu.tamu.edu",22,username='kailu',password=com_par['p'])
+	s.connect("chiu.tamu.edu",22,username='kailu',password=c_p['p'])
 	sftp = s.open_sftp()
 	sftp.get(i, j)
 	

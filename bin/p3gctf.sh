@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gctf \
+echo "gctf \
 Micrographs/Corrected*_???.mrc \
 --apix 1.87 \
 --dstep 5 \
@@ -8,4 +8,4 @@ Micrographs/Corrected*_???.mrc \
 --cs 2 \
 --ac 0.1 \
 --do_EPA 1 \
---logsuffix _ctffind3.log
+--logsuffix _ctffind3.log"

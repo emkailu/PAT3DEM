@@ -1,0 +1,18 @@
+#BSUB -J gctf
+#BSUB -L /bin/bash
+#BSUB -W 168:00
+#BSUB -n 1
+#BSUB -R "rusage[mem=20000]"
+#BSUB -M 20000
+#BSUB -o jobstatus.%J
+#BSUB -R 'span[ptile=1]'
+#BSUB -R "select[gpu]"
+#BSUB -P 082861611545
+
+source ~/.bashrc
+#module purge
+#module load OpenMPI/1.8.7-GCC-4.9.3
+#module load RELION/2.0-beta
+
+p3gctf.sh
+

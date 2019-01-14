@@ -4,7 +4,6 @@ import os
 import sys
 import argparse
 import time
-import subprocess
 
 def main():
 	progname = os.path.basename(sys.argv[0])
@@ -12,7 +11,7 @@ def main():
 	Run p3motioncor2opt.py to process movies listed in f.txt.
 	"""
 	
-	args_def = {'apix':0.82, 'apixr':0.41, 'bin':2, 'patch':10, 'voltage':300, 'time':200, 'rate':3, 'target':5, 'tilt':'0 0', 'gainref':'', 'save':1, 'path':'../rawmovies/', 'server':'sherlock'}
+	args_def = {'apix':0.82, 'apixr':0.41, 'bin':2, 'patch':10, 'voltage':300, 'time':200, 'rate':3, 'target':5, 'tilt':'0 0', 'gainref':'', 'save':1, 'path':'../Rawmovies/'}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("f", nargs='*', help="specify the txt file used for p3download.py")
 	parser.add_argument("-a", "--apix", type=float, help="specify counting apix, by default {}".format(args_def['apix']))
@@ -27,7 +26,6 @@ def main():
 	parser.add_argument("-g", "--gainref", type=str, help="specify the gainref option, by default {}. e.g., '-Gain ../14sep05c_raw_196/norm-amibox05-0.mrc -RotGain 0 -FlipGain 1'".format(args_def['gainref']))
 	parser.add_argument("-s", "--save", type=int, help="specify whether save aligned movie, by default {}".format(args_def['save']))
 	parser.add_argument("-pa", "--path", type=str, help="specify the path of raw movies, by default {}".format(args_def['path']))
-	parser.add_argument("-sv", "--server", type=str, help="specify the server (sherlock, local), by default {}".format(args_def['server']))
 	args = parser.parse_args()
 	
 	if len(sys.argv) == 1:
@@ -62,12 +60,7 @@ def main():
 		# submit the job
 		cmd = "p3motioncor2opt.py {}{} {}".format(args.path, l, option)
 		basename = os.path.basename(os.path.splitext(l)[0])
-		if args.server == 'sherlock':
-			p3c.sherlock(cmd, basename, walltime, gpu, ptile)
-		if args.server == 'local':
-			with open('.zz', 'w') as cmd_w:
-				cmd_w.write(cmd)
-			subprocess.call(['sh', '.zz'])
+		p3c.terra(cmd, basename, walltime, gpu, ptile)
 	# process the last one
 	last = args.path + lines[-1].strip()
 	size = os.path.getsize(last)
@@ -79,12 +72,7 @@ def main():
 		size_new = os.path.getsize(last)
 	cmd = "p3motioncor2opt.py {} {}".format(last, option)
 	basename = os.path.basename(os.path.splitext(last)[0])
-	if args.server == 'sherlock':
-		p3c.sherlock(cmd, basename, walltime, gpu, ptile)
-	if args.server == 'local':
-		with open('.zz', 'w') as cmd_w:
-			cmd_w.write(cmd)
-		subprocess.call(['sh', '.zz'])	
-
+	p3c.terra(cmd, basename, walltime, gpu, ptile)		
+			
 if __name__ == '__main__':
 	main()

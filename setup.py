@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name = 'pat3dem',
-      version = '0.3.0',
+      version = '0.2.0',
       description = 'Personalized Automatic Tools for 3D Electron Microscopy',
       author = 'Kailu Yang',
       author_email = 'emkailu@gmail.com',

@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH -A 122792648842
+#SBATCH --job-name=test
+#SBATCH --output=2d_001.%j
+#SBATCH --time=24:00:00
+#SBATCH --ntasks=3                  # Relion needs 1 master (CPU) and several slaves (GPU)
+#SBATCH --nodes=2                   # 2 GPU slaves
+#SBATCH --cpus-per-task=1           # More CPU might help GPU, but at additional charge
+#SBATCH --mem=110G                  # Maximum is 114688 MB for the 128 GB nodes
+#SBATCH -p gpu
+#SBATCH --gres=gpu:1                # 1 GPU per node
+
+source ~/.bashrc
+
+source ~/.p3relion3
+
+mkdir -p Class2D/2d_001
+
+mpirun -n 3 `which relion_refine_mpi` --o Class2D/2d_001/run --i particles.star --particle_diameter 300 --angpix 3.74 --ctf  --iter 50 --tau2_fudge 2 --K 100 --flatten_solvent  --zero_mask  --oversampling 1 --psi_step 10 --offset_range 5 --offset_step 2 --norm --scale  --j 1 --dont_check_norm &>2d_001.log

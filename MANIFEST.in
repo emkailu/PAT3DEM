@@ -1,4 +1,4 @@
 include README.md INSTALL.sh LICENSE
-recursive-include doc *.txt *.job *.source
+recursive-include doc *.txt
 recursive-include bin *.py *.sh
 

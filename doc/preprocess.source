@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+export SKIP_DATATRANSFER="yes" # Specify as "yes" if data is already transferred to rawmovies/sub-sub-folders.
+export PROJECT_FOLDER="/scratch/user/ldshen/test" # Specify the main-folder for data processing. This folder should NOT be an existing one if $SKIP_DATATRANSFER="no".
+
+# If SKIP_DATATRANSFER="no", MUST specify the following:
+export DATA_SERVER=k2centos.stanford.edu # Specify the data server address.
+export DATA_SERVER_USER=kornberg # Specify the data server username.
+export DATA_PATH=/data/kornberg/data/Kailu # Specify the data server folder, under which you have sub-folders directly containing raw data, ie., no sub-sub-folder. Note:
+#1. No space in folder or file names! No dot except the one in file extension.
+#2. In the data server folder, 'ls sub-folders-to-be-processed/*.mrc > f.txt'
+
+# Check p3motioncor2opt.py for detailed meanings of the following:
+export MOTIONCOR2OPT="p3motioncor2opt.py" # Specify as "#p3motioncor2opt.py" if it has been already done, in which case, it is fine if the output micrographs have already been moved to Micrographs/sub-sub-folders.
+export APIX=1.87 # Specify the pixel size in counting mode.
+export APIXR=1.87 # Specify the real pixel size of the raw movies (either $APIX or $APIX/2).
+export BIN=1 # Specify binning factor.
+export PATCH=10 # Specify the patch to start with.
+export VOLTAGE=200 # Specify the voltage (kV).
+export TIME=400 # Specify exposure time per frame in ms.
+export RATE=6 # Specify dose rate in e/pix/s (counting pixel, not superresolution).
+export TARGET=10 # Specify the target resolution.
+export TILT='0 0' # Specify the tilt.
+export GAINREF='' # Specify the gainref option.
+export SAVE=0 # Specify whether save aligned movie.
+
+# Parameters for Gctf only:
+export GCTF="module load CUDA/8.0.44; ~/gctf/Gctf_v1.06/bin/Gctf-v1.06_sm_30_cu8.0_x86_64" # Specify Gctf & its cuda version. If you want to skip Gctf, change "~" to "#~", in which case, you may also need to specify GCTF_RENAME as "no".
+export GCTF_RENAME="yes" # Specify whether to rename the output with "_DW".
+export DSTEP=5 # Specify the physical size of detector in micrometer. It's 5 um for K2 counting mode. Specify as 20 if it's binned by 4 (in the motioncor2 step).
+export CS=2 # Specify the spherical abberation.
+export AC=0.1 # Specify the amplitude contrast.
+
+# Parameters for Gautomatch only:
+export GAUTOMATCH="module load CUDA/8.0.44; ~/gautomatch/Gautomatch-v0.53_sm_20_cu8.0_x86_64" # Specify Gautomatch & its cuda version. If you want to skip Gautomatch, just change "~" to "#~".
+export DIAMETER=300 # Specify particle diameter in Å.
+export MINDIST=180 # Specify minimum distance in Å.
+export CC_CUTOFF=0.2 # Specify cross-correlation cutoff. May start with a small value, and afterwards use 'p3starscreen.sh' to increase cutoff.
+
+#ENVIRONMENTAL_VIRIABLES_END
+
+SCRIPTSELF="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/"$(basename "${BASH_SOURCE[0]}")"
+
+mkdir -p $PROJECT_FOLDER/rawmovies; cd $PROJECT_FOLDER/rawmovies
+if [ $SKIP_DATATRANSFER = "no" ]; then
+    printf "Downloading f.txt ...\n"
+    read -sp "$DATA_SERVER_USER@$DATA_SERVER's password: " ds_pswd; echo
+    export DATA_SERVER_PASSWORD=$ds_pswd
+    printf "f.txt" > .zz
+    p3download.py .zz
+    rm .zz
+    printf "\n"
+else
+    ls */*.* >f.txt
+fi
+cp f.txt d.txt
+
+printf "Submitting a job to monitor data transfer and submit preprocessing jobs ...\n"
+mkdir -p $PROJECT_FOLDER/jobs; cd $PROJECT_FOLDER/jobs
+cp $SCRIPTSELF .
+sed '/#ENVIRONMENTAL_VIRIABLES_END/q' $SCRIPTSELF >>$PROJECT_FOLDER/.p3settings # write environmental variables
+python -c "import pat3dem.main as p3m; p3m.dwnld_driftcor_ctf_ptclpick('preprocess', 'terra')"
+printf "Done!\n\n"
+
+cd $PROJECT_FOLDER/rawmovies

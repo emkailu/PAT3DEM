@@ -7,7 +7,7 @@
 
 1. BE ORGANIZED.
 specimen_mag/subfolder/date/date_number, e.g.,
-"PHN-GK_25K/Rawmovies/20151021/20151021_001.mrc"
+"PHN-GK_25K/rawmovies/20151021/20151021_001.mrc"
 
 2. PREPROCESS MOVIES.
 ***mag_distortion_correct

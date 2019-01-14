@@ -11,7 +11,7 @@ def main():
 	Run p3motoincor2.py to process movies listed in f.txt.
 	"""
 	
-	args_def = {'apix':1.315, 'apixr':0.6575, 'bin':1, 'patch':5, 'voltage':300, 'time':200, 'rate':7, 'target':5, 'tilt':'0 0', 'gainref':'', 'path':'../Rawmovies/'}
+	args_def = {'apix':1.315, 'apixr':0.6575, 'bin':1, 'patch':5, 'voltage':300, 'time':200, 'rate':7, 'target':5, 'tilt':'0 0', 'gainref':'', 'path':'../rawmovies/'}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("f", nargs='*', help="specify the txt file used for p3download.py")
 	parser.add_argument("-a", "--apix", type=float, help="specify counting apix, by default {}".format(args_def['apix']))
